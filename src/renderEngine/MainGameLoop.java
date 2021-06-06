@@ -9,6 +9,7 @@ import models.TexturedModel;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL30;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -26,6 +27,7 @@ public class MainGameLoop {
 	private static long fps = 0;
 
 	private static boolean toMovePlayer = false;
+	private static boolean toMoveCamera = false;
 	private static int key;
 
 	public static void loop(long window) {
@@ -108,6 +110,7 @@ public class MainGameLoop {
 
 			if(toMovePlayer) {
 				player.move(key);
+				camera.move(key);
 				toMovePlayer = false;
 			}
 

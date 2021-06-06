@@ -4,7 +4,7 @@ import org.joml.Vector3f;
 
 public class Camera implements Keys{
 
-    private static Vector3f position = new Vector3f(100,15,50);
+    private Vector3f position = new Vector3f(100,15,50);
     private float pitch = 0;
     private float yaw = 0;
     private float roll = 0;
@@ -48,7 +48,7 @@ public class Camera implements Keys{
         return roll;
     }
 
-    public static void setPosition(Vector3f position) {
-        Camera.position = position;
+    public void setPosition(Vector3f position) {
+        this.position = position;
     }
 }
