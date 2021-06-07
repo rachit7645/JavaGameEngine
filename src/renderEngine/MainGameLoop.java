@@ -9,7 +9,6 @@ import models.TexturedModel;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL30;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -76,7 +75,7 @@ public class MainGameLoop {
 		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
 
 		Light light = new Light(new Vector3f(20000, 40000, 20000), new Vector3f(1, 1, 1));
-		Camera camera = new Camera();
+		Camera camera = new Camera(player);
 
 		List<Entity> entities = new ArrayList<Entity>();
 
@@ -110,8 +109,13 @@ public class MainGameLoop {
 
 			if(toMovePlayer) {
 				player.move(key);
-				camera.move(key);
+				camera.move();
 				toMovePlayer = false;
+			}
+
+			if(toMoveCamera) {
+				camera.move();
+				toMoveCamera = false;
 			}
 
 			for(Entity entity : entities)
@@ -151,5 +155,13 @@ public class MainGameLoop {
 
 	public static void setKey(int key) {
 		MainGameLoop.key = key;
+	}
+
+	public static void setToMoveCamera(boolean toMoveCamera) {
+		MainGameLoop.toMoveCamera = toMoveCamera;
+	}
+
+	public static boolean isToMoveCamera() {
+		return toMoveCamera;
 	}
 }

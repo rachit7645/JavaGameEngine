@@ -49,6 +49,7 @@ public class DisplayManager implements Keys {
 		window = GLFW.glfwCreateWindow(800, 600, "A Game By RachitCodes: "+gameVersion, NULL, NULL);
 		if (window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
+
 		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
 			if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
 				GLFW.glfwSetWindowShouldClose(window, true);
@@ -67,10 +68,32 @@ public class DisplayManager implements Keys {
 			}else if (key == GLFW.GLFW_KEY_SPACE) {
 				MainGameLoop.setKey(Keys.KEY_SPACEBAR);
 				MainGameLoop.setToMovePlayer(true);
-			}else if (key == GLFW.GLFW_KEY_LEFT_SHIFT) {
 			}
 		});
+
 		GLFW.glfwSetWindowSizeCallback(window, (window, width, height) -> MasterRenderer.setToResize(true));
+
+		GLFW.glfwSetCursorPosCallback(window, (window, xPos, yPos) -> {
+			System.out.println("Cursor pos: " + xPos + ' ' + yPos);
+			Camera.setOldCursorXPos(Camera.getCursorXPos());
+			Camera.setOldCursorYPos(Camera.getCursorYPos());
+			Camera.setCursorXPos((float) xPos);
+			Camera.setCursorYPos((float) yPos);
+			MainGameLoop.setToMoveCamera(true);
+		});
+
+		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
+			if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action==GLFW.GLFW_PRESS)
+				Camera.setIsMouseButton1Down(true);
+			else if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action==GLFW.GLFW_RELEASE)
+				Camera.setIsMouseButton1Down(false);
+		});
+
+		GLFW.glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
+			System.out.println("yOffset: " + yOffset);
+			Camera.setMouseScrollY((float) yOffset);
+			MainGameLoop.setToMoveCamera(true);
+		});
 
 		try (MemoryStack stack = stackPush()) {
 			IntBuffer pWidth = stack.mallocInt(1);
