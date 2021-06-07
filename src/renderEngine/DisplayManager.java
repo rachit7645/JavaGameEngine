@@ -74,7 +74,6 @@ public class DisplayManager implements Keys {
 		GLFW.glfwSetWindowSizeCallback(window, (window, width, height) -> MasterRenderer.setToResize(true));
 
 		GLFW.glfwSetCursorPosCallback(window, (window, xPos, yPos) -> {
-			System.out.println("Cursor pos: " + xPos + ' ' + yPos);
 			Camera.setOldCursorXPos(Camera.getCursorXPos());
 			Camera.setOldCursorYPos(Camera.getCursorYPos());
 			Camera.setCursorXPos((float) xPos);
@@ -90,7 +89,6 @@ public class DisplayManager implements Keys {
 		});
 
 		GLFW.glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
-			System.out.println("yOffset: " + yOffset);
 			Camera.setMouseScrollY((float) yOffset);
 			MainGameLoop.setToMoveCamera(true);
 		});
@@ -104,6 +102,8 @@ public class DisplayManager implements Keys {
 					(vidmode.width() - pWidth.get(0)) / 2,
 					(vidmode.height() - pHeight.get(0)) / 2);
 		}
+
+		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 
 		GLFW.glfwMakeContextCurrent(window);
 		GLFW.glfwSwapInterval(0);
