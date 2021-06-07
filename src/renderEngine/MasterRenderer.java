@@ -29,7 +29,7 @@ public class MasterRenderer {
 
     private static final float RED = 184.0f/255.0f;
     private static final float BLUE = 238.0f/255.0f;
-    private static final float GREEN = 213.0f/255.0f;;
+    private static final float GREEN = 213.0f/255.0f;
     private static boolean toResize;
 
     private StaticShader shader = new StaticShader();
@@ -100,6 +100,7 @@ public class MasterRenderer {
         terrainShader.loadSkyColor(RED, GREEN, BLUE);
         terrainShader.loadLight(light);
         terrainShader.loadViewMatrix(camera);
+
         terrainRenderer.render(terrains);
         terrainShader.stop();
 
@@ -126,18 +127,25 @@ public class MasterRenderer {
 
     public Matrix4f createProjectionMatrix(IntBuffer x, IntBuffer y) {
 
-        float aspectRatio = (float) (x.get(0) / y.get(0));
-        float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
-        float x_scale = y_scale / aspectRatio;
-        float frustum_length = FAR_PLANE - NEAR_PLANE;
-
         Matrix4f projectionMatrix = new Matrix4f();
-        projectionMatrix.m00(x_scale);
-        projectionMatrix.m11(y_scale);
-        projectionMatrix.m22(-((FAR_PLANE + NEAR_PLANE)) / frustum_length);
-        projectionMatrix.m23(-1f);
-        projectionMatrix.m32(-(2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
-        projectionMatrix.m33(0);
+
+        try {
+
+            float aspectRatio = (float) (x.get(0) / y.get(0));
+            float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
+            float x_scale = y_scale / aspectRatio;
+            float frustum_length = FAR_PLANE - NEAR_PLANE;
+
+            projectionMatrix.m00(x_scale);
+            projectionMatrix.m11(y_scale);
+            projectionMatrix.m22(-((FAR_PLANE + NEAR_PLANE)) / frustum_length);
+            projectionMatrix.m23(-1f);
+            projectionMatrix.m32(-(2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
+            projectionMatrix.m33(0);
+
+        }catch(ArithmeticException e) {
+            e.printStackTrace();
+        }
 
         return projectionMatrix;
 

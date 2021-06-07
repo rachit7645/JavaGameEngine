@@ -7,7 +7,7 @@ import renderEngine.MainGameLoop;
 public class Player extends Entity implements Keys{
 
     private static final float RUN_SPEED = 5;
-    private static final float TURN_SPEED = 30;
+    private static final float TURN_SPEED = 15;
     private static final float GRAVITY = -0.42f;
     private static final float JUMP_HEIGHT = 14;
 

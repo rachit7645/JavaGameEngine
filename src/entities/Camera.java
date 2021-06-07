@@ -46,7 +46,10 @@ public class Camera implements Keys{
 		float offsetZ = (float) (hDistance * Math.cos(Math.toRadians(theta)));
 		position.x = player.getPosition().x - offsetX;
 		position.z = player.getPosition().z - offsetZ;
-		position.y = player.getPosition().y + vDistance;
+		if(player.getPosition().y == 0)
+			position.y = player.getPosition().y + vDistance;
+		else
+			position.y = vDistance;
 		this.yaw = 180 - (player.getRotY() + angleAroundPlayer);
 
 	}

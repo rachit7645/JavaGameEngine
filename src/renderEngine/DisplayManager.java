@@ -14,6 +14,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class DisplayManager implements Keys {
 
 	private long window;
+	private int iter = 0;
 	public String gameVersion="Beta 0.2";
 
 	public void run() {
@@ -52,7 +53,13 @@ public class DisplayManager implements Keys {
 
 		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
 			if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
-				GLFW.glfwSetWindowShouldClose(window, true);
+				if(iter == 0) {
+					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+					iter++;
+				}else{
+					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+					iter--;
+				}
 			}else if (key == GLFW.GLFW_KEY_W) {
 				MainGameLoop.setKey(Keys.KEY_W);
 				MainGameLoop.setToMovePlayer(true);
@@ -97,16 +104,16 @@ public class DisplayManager implements Keys {
 			IntBuffer pWidth = stack.mallocInt(1);
 			IntBuffer pHeight = stack.mallocInt(1);
 			GLFW.glfwGetWindowSize(window, pWidth, pHeight);
-			GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+			GLFWVidMode vidMode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 			GLFW.glfwSetWindowPos(window,
-					(vidmode.width() - pWidth.get(0)) / 2,
-					(vidmode.height() - pHeight.get(0)) / 2);
+					(vidMode.width() - pWidth.get(0)) / 2,
+					(vidMode.height() - pHeight.get(0)) / 2);
 		}
-
-		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_HIDDEN);
 
 		GLFW.glfwMakeContextCurrent(window);
 		GLFW.glfwSwapInterval(0);
 		GLFW.glfwShowWindow(window);
+
+		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 	}
 }
