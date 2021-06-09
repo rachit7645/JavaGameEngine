@@ -21,7 +21,7 @@ public class Texture {
         ByteBuffer buf = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
         try {
             decoder.decode(buf, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
-        } catch (IOException e) {
+        }catch (IOException e) {
             e.printStackTrace();
         }
         buf.flip();

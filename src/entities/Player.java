@@ -35,7 +35,6 @@ public class Player extends Entity implements Keys{
             toMove = false;
         }else{
             toMove = true;
-
         }
     }
 

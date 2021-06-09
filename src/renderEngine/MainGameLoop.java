@@ -87,12 +87,14 @@ public class MainGameLoop {
 						random.nextFloat() * -400), 0, 0, 0, 1.8f));
 			}
 			if(i % 3 == 0){
-				entities.add(new Entity(fernModel, new Vector3f(random.nextFloat() * 400 - 200, 0,
-						random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 0.9f));
 				entities.add(new Entity(treeModel, new Vector3f(random.nextFloat() * 800 - 400, 0,
 						random.nextFloat() * -600), 0, 0, 0, 9f));
 				entities.add(new Entity(lowPolyTreeModel, new Vector3f(random.nextFloat() * 900 - 400, 0,
 						random.nextFloat() * -700), 0, 0, 0, 0.9f));
+			}
+			if(i % 5 == 0) {
+				entities.add(new Entity(fernModel, new Vector3f(random.nextFloat() * 400 - 200, 0,
+						random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 0.9f));
 			}
 		}
 
@@ -107,6 +109,7 @@ public class MainGameLoop {
 		MasterRenderer renderer = new MasterRenderer(window);
 
 		startTime = System.currentTimeMillis();
+
 		while(!GLFW.glfwWindowShouldClose(window)) {
 
 			if(toMovePlayer) {
@@ -145,6 +148,7 @@ public class MainGameLoop {
 		}
 		loader.cleanUp();
 		renderer.cleanUp();
+
 		GL.destroy();
 	}
 

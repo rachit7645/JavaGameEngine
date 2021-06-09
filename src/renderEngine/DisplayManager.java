@@ -63,6 +63,7 @@ public class DisplayManager implements Keys {
 			}else if (key == GLFW.GLFW_KEY_W) {
 				MainGameLoop.setKey(Keys.KEY_W);
 				MainGameLoop.setToMovePlayer(true);
+
 			}else if (key == GLFW.GLFW_KEY_A) {
 				MainGameLoop.setKey(Keys.KEY_A);
 				MainGameLoop.setToMovePlayer(true);

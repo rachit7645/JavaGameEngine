@@ -5,6 +5,7 @@ import entities.Entity;
 import entities.Light;
 import models.TexturedModel;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -23,6 +24,8 @@ import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 
 public class MasterRenderer {
 
+    private long window;
+
     private static final float FOV = 70;
     private static final float NEAR_PLANE = 0.1f;
     private static final float FAR_PLANE = 1000f;
@@ -30,6 +33,7 @@ public class MasterRenderer {
     private static final float RED = 184.0f/255.0f;
     private static final float BLUE = 238.0f/255.0f;
     private static final float GREEN = 213.0f/255.0f;
+
     private static boolean toResize;
 
     private StaticShader shader = new StaticShader();
@@ -37,8 +41,6 @@ public class MasterRenderer {
 
     private TerrainShader terrainShader = new TerrainShader();
     private TerrainRenderer terrainRenderer = new TerrainRenderer(terrainShader);
-
-    private long window;
 
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<Terrain>();
