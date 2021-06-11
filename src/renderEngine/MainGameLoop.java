@@ -8,8 +8,6 @@ import models.RawModel;
 import models.TexturedModel;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
-import org.lwjgl.openal.AL;
-import org.lwjgl.openal.AL10;
 import org.lwjgl.opengl.GL;
 import terrains.Terrain;
 import textures.ModelTexture;
