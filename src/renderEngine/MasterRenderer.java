@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 import shaders.StaticShader;
 import shaders.TerrainShader;
 import terrains.Terrain;
@@ -63,6 +64,7 @@ public class MasterRenderer {
         GL11.glViewport(0, 0, width.get(0), height.get(0));
 
         GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL14.GL_MULTISAMPLE);
         enableCulling();
     };
 
