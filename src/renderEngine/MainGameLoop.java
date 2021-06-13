@@ -67,10 +67,7 @@ public class MainGameLoop {
 		TexturedModel lowPolyTreeModel = new TexturedModel(model4, lowPolyTreeTexture);
 		TexturedModel playerModel = new TexturedModel(model5, playerTexture);
 
-		Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap);
-		Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap);
-		Terrain terrain3 = new Terrain(0,0, loader, texturePack, blendMap);
-		Terrain terrain4 = new Terrain(-1,0, loader, texturePack, blendMap);
+		Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "heightMap.png");
 
 		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
 
@@ -100,9 +97,6 @@ public class MainGameLoop {
 
 		List<Terrain> terrains = new ArrayList<Terrain>();
 		terrains.add(terrain);
-		terrains.add(terrain2);
-		terrains.add(terrain3);
-		terrains.add(terrain4);
 
 		MasterRenderer renderer = new MasterRenderer(window);
 
@@ -111,7 +105,7 @@ public class MainGameLoop {
 		while(!GLFW.glfwWindowShouldClose(window)) {
 
 			if(toMovePlayer) {
-				player.move(key);
+				player.move(key, terrain);
 				camera.move();
 				toMovePlayer = false;
 			}
@@ -142,7 +136,8 @@ public class MainGameLoop {
 			}else{
 				fps++;
 			}
-			player.gravity();
+
+			player.gravity(terrain);
 		}
 		loader.cleanUp();
 		renderer.cleanUp();

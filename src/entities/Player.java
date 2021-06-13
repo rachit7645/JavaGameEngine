@@ -3,6 +3,7 @@ package entities;
 import models.TexturedModel;
 import org.joml.Vector3f;
 import renderEngine.MainGameLoop;
+import terrains.Terrain;
 
 public class Player extends Entity implements Keys{
 
@@ -10,6 +11,7 @@ public class Player extends Entity implements Keys{
     private static final float TURN_SPEED = 15;
     private static final float GRAVITY = -0.42f;
     private static final float JUMP_HEIGHT = 14;
+    private static final float TERRAIN_HEIGHT = 0;
 
     private float currentSpeed = 0;
     private float currentTurnSpeed = 0;
@@ -21,10 +23,10 @@ public class Player extends Entity implements Keys{
         super(model, position, rotX, rotY, rotZ, scale);
     }
 
-    public void move(int key) {
+    public void move(int key, Terrain currentTerrain) {
 
         if (toMove) {
-            checkInput(key);
+            checkInput(key, currentTerrain);
 
             super.increaseRotation(0, currentTurnSpeed * MainGameLoop.getDelta(), 0);
 
@@ -32,13 +34,14 @@ public class Player extends Entity implements Keys{
             float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
             float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
             super.increasePosition(dx, 0, dz);
+            this.gravity(currentTerrain);
             toMove = false;
         }else{
             toMove = true;
         }
     }
 
-    private void checkInput(int key) {
+    private void checkInput(int key,Terrain currentTerrain) {
 
         if (key == KEY_W)
             this.currentSpeed = RUN_SPEED;
@@ -55,21 +58,22 @@ public class Player extends Entity implements Keys{
             this.currentTurnSpeed = 0;
 
         if(key == KEY_SPACEBAR)
-            jump();
+            jump(currentTerrain);
 
     }
 
-    private void jump() {
-        if(super.getPosition().y <= 0)
+    private void jump(Terrain currentTerrain) {
+        if(super.getPosition().y <= currentTerrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z))
             verticalSpeed = JUMP_HEIGHT;
             super.increasePosition(0, verticalSpeed, 0);
     }
 
-    public void gravity() {
+    public void gravity(Terrain currentTerrain) {
         verticalSpeed = 0;
-        if(super.getPosition().y > 0)
+        float terrainHeight = currentTerrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
+        if(super.getPosition().y > terrainHeight)
             super.increasePosition(0, GRAVITY * MainGameLoop.getDelta(), 0);
-        if(super.getPosition().y < 0)
-            super.getPosition().y = 0;
+        if(super.getPosition().y < terrainHeight)
+            super.getPosition().y = terrainHeight;
     }
 }
