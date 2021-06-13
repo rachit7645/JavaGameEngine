@@ -1,11 +1,11 @@
-package renderEngine;
+package modelLoader;
 
 import models.RawModel;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import renderEngine.Loader;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ public class OBJLoader {
     public static RawModel loadOBjModel(String fileName, Loader loader) {
         FileReader fileReader = null;
         try {
-            fileReader = new FileReader(new File("res/" + fileName + ".obj"));
-        } catch (FileNotFoundException e) {
+            fileReader = new FileReader(OBJLoader.class.getResource("res/" + fileName + ".obj").getFile());
+        } catch (Exception e) {
             e.printStackTrace();
         }
         BufferedReader reader = new BufferedReader(fileReader);

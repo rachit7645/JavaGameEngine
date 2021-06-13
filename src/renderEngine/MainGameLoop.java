@@ -4,6 +4,7 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import modelLoader.OBJLoader;
 import models.RawModel;
 import models.TexturedModel;
 import org.joml.Vector3f;
