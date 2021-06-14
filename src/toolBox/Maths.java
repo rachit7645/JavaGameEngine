@@ -4,6 +4,7 @@ import entities.Camera;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public class Maths {
 
@@ -18,6 +19,17 @@ public class Maths {
                 .scale(scale);
         return matrix;
 
+    }
+
+    public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
+
+        Matrix4f matrix = new Matrix4f();
+
+        matrix.identity()
+                .translate(new Vector3f(translation.x,translation.y, 0.0f))
+                .scale(new Vector3f(scale.x, scale.y, 1.0f));
+
+        return matrix;
     }
 
     public static Matrix4f createViewMatrix(Camera camera) {

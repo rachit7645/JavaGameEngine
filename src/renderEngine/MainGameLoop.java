@@ -4,9 +4,12 @@ import entities.Camera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
+import guis.GUIRenderer;
+import guis.GUITexture;
 import modelLoader.OBJLoader;
 import models.RawModel;
 import models.TexturedModel;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
@@ -130,7 +133,13 @@ public class MainGameLoop {
 
 		entities.add(player);
 
+		List<GUITexture> guis = new ArrayList<GUITexture>();
+		GUITexture gui = new GUITexture(loader.loadTexture("image.png"),
+				new Vector2f(-0.75f, -0.75f), new Vector2f(0.25f, 0.25f));
+		guis.add(gui);
+
 		MasterRenderer renderer = new MasterRenderer(window);
+		GUIRenderer guiRenderer = new GUIRenderer(loader);
 
 		currentTerrain = Terrain.getCurrentTerrain(player, terrains);
 		player.getPosition().y = currentTerrain.getHeightOfTerrain(player.getPosition().x, player.getPosition().z);
@@ -158,6 +167,7 @@ public class MainGameLoop {
 			}
 
 			renderer.render(light, camera);
+			guiRenderer.render(guis);
 
 			GLFW.glfwSwapBuffers(window);
 			GLFW.glfwPollEvents();
@@ -177,6 +187,7 @@ public class MainGameLoop {
 		}
 		loader.cleanUp();
 		renderer.cleanUp();
+		guiRenderer.cleanUp();
 
 		GL.destroy();
 	}
