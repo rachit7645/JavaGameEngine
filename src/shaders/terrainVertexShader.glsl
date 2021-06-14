@@ -15,7 +15,7 @@ out vec3 toLightVector;
 out vec3 toCameraVector;
 out float visibility;
 
-const float density = 0.004;
+const float density = 0.0035;
 const float gradient = 1.5;
 
 void main(void) {

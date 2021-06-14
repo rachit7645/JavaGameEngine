@@ -1,5 +1,6 @@
 package terrains;
 
+import entities.Entity;
 import models.RawModel;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -11,16 +12,18 @@ import toolBox.Maths;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 public class Terrain {
 
-    public static final float SIZE = 800;
+    private static final float SIZE = 800;
     private static final float MAX_HEIGHT = 51;
     private static final float MAX_PIXEL_COLOR = 256 * 256 * 256;
 
     private float[][] heights;
 
     private float x, z;
+    private float gridX, gridZ;
     private RawModel model;
     private TerrainTexturePack texturePack;
     private TerrainTexture blendMap;
@@ -28,6 +31,8 @@ public class Terrain {
     public Terrain(float gridX, float gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap, String heightMap) {
         this.texturePack = texturePack;
         this.blendMap = blendMap;
+        this.gridX = gridX;
+        this.gridZ = gridZ;
         this.x = gridX * SIZE;
         this.z = gridZ * SIZE;
         this.model = generateTerrain(loader, heightMap);
@@ -179,6 +184,42 @@ public class Terrain {
         height *= MAX_HEIGHT;
 
         return height;
+
+    }
+
+    public static Terrain getCurrentTerrain(Entity entity, List<Terrain> terrains) {
+
+        float gridX = (float) Math.floor(entity.getPosition().x / Terrain.SIZE);
+        float gridZ = (float) Math.floor(entity.getPosition().z / Terrain.SIZE);
+
+        Terrain currentTerrain = null;
+
+        for(Terrain terrain : terrains) {
+            if(gridX == terrain.gridX && gridZ == terrain.gridZ) {
+                currentTerrain = terrain;
+                break;
+            }
+        }
+
+        return currentTerrain;
+
+    }
+
+    public static Terrain getCurrentTerrain(float x, float z, List<Terrain> terrains) {
+
+        float gridX = (float) Math.floor(x / Terrain.SIZE);
+        float gridZ = (float) Math.floor(z / Terrain.SIZE);
+
+        Terrain currentTerrain = null;
+
+        for(Terrain terrain : terrains) {
+            if(gridX == terrain.gridX && gridZ == terrain.gridZ) {
+                currentTerrain = terrain;
+                break;
+            }
+        }
+
+        return currentTerrain;
 
     }
 

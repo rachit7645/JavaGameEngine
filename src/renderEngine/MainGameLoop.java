@@ -69,44 +69,78 @@ public class MainGameLoop {
 		TexturedModel playerModel = new TexturedModel(model5, playerTexture);
 
 		Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "heightMap.png");
+		Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "heightMap.png");
+		Terrain terrain3 = new Terrain(0,0, loader, texturePack, blendMap, "heightMap.png");
+		Terrain terrain4 = new Terrain(-1,0, loader, texturePack, blendMap, "heightMap.png");
+		Terrain currentTerrain;
 
 		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
 
 		Light light = new Light(new Vector3f(20000, 40000, 20000), new Vector3f(1, 1, 1));
 		Camera camera = new Camera(player);
 
+		List<Terrain> terrains = new ArrayList<Terrain>();
+		terrains.add(terrain);
+		terrains.add(terrain2);
+		terrains.add(terrain3);
+		terrains.add(terrain4);
+
 		List<Entity> entities = new ArrayList<Entity>();
 
 		for(int i = 0; i < 400; i++) {
 			if(i % 7 == 0) {
-				entities.add(new Entity(grassModel, new Vector3f(random.nextFloat() * 400 - 200, 0,
-						random.nextFloat() * -400), 0, 0, 0, 1.8f));
+
+				float grassXPos = random.nextFloat() * 400 - 200;
+				float grassZPos = random.nextFloat() * -400;
+
+				currentTerrain = Terrain.getCurrentTerrain(grassXPos, grassZPos, terrains);
+
+				entities.add(new Entity(grassModel, new Vector3f(grassXPos, currentTerrain.getHeightOfTerrain(grassXPos, grassZPos),
+						grassZPos), 0, 0, 0, 1.8f));
 			}
 			if(i % 3 == 0){
-				entities.add(new Entity(treeModel, new Vector3f(random.nextFloat() * 800 - 400, 0,
-						random.nextFloat() * -600), 0, 0, 0, 9f));
-				entities.add(new Entity(lowPolyTreeModel, new Vector3f(random.nextFloat() * 900 - 400, 0,
-						random.nextFloat() * -700), 0, 0, 0, 0.9f));
+
+				float treeXPos = random.nextFloat() * 800 - 400;
+				float treeZPos = random.nextFloat() * -600;
+
+				currentTerrain = Terrain.getCurrentTerrain(treeXPos, treeZPos, terrains);
+
+				entities.add(new Entity(treeModel, new Vector3f(treeXPos, currentTerrain.getHeightOfTerrain(treeXPos, treeZPos),
+						treeZPos), 0, 0, 0, 9f));
+
+				float lowPolyTreeXPos = random.nextFloat() * 900 - 400;
+				float lowPolyTreeZPos = random.nextFloat() * -700;
+
+				currentTerrain = Terrain.getCurrentTerrain(lowPolyTreeXPos, lowPolyTreeZPos, terrains);
+
+				entities.add(new Entity(lowPolyTreeModel, new Vector3f(lowPolyTreeXPos, currentTerrain.getHeightOfTerrain(
+						lowPolyTreeXPos, lowPolyTreeZPos), lowPolyTreeZPos), 0, 0, 0, 0.9f));
 			}
 			if(i % 5 == 0) {
-				entities.add(new Entity(fernModel, new Vector3f(random.nextFloat() * 400 - 200, 0,
-						random.nextFloat() * -400), 0, random.nextFloat() * 360, 0, 0.9f));
+
+				float fernXPos = random.nextFloat() * 400 - 200;
+				float fernZPos = random.nextFloat() * -400;
+
+				currentTerrain = Terrain.getCurrentTerrain(fernXPos, fernZPos, terrains);
+
+				entities.add(new Entity(fernModel, new Vector3f(fernXPos, currentTerrain.getHeightOfTerrain(fernXPos, fernZPos),
+						fernZPos), 0, random.nextFloat() * 360, 0, 0.9f));
 			}
 		}
 
 		entities.add(player);
 
-		List<Terrain> terrains = new ArrayList<Terrain>();
-		terrains.add(terrain);
-
 		MasterRenderer renderer = new MasterRenderer(window);
+
+		currentTerrain = Terrain.getCurrentTerrain(player, terrains);
 
 		startTime = System.currentTimeMillis();
 
 		while(!GLFW.glfwWindowShouldClose(window)) {
 
 			if(toMovePlayer) {
-				player.move(key, terrain);
+				currentTerrain = Terrain.getCurrentTerrain(player, terrains);
+				player.move(key, currentTerrain);
 				camera.move();
 				toMovePlayer = false;
 			}
@@ -118,8 +152,8 @@ public class MainGameLoop {
 
 			for(Entity entity : entities)
 				renderer.processEntity(entity);
-			for(Terrain currentTerrain : terrains) {
-				renderer.processTerrain(currentTerrain);
+			for(Terrain cTerrain : terrains) {
+				renderer.processTerrain(cTerrain);
 			}
 
 			renderer.render(light, camera);
@@ -138,7 +172,7 @@ public class MainGameLoop {
 				fps++;
 			}
 
-			player.gravity(terrain);
+			player.gravity(currentTerrain);
 		}
 		loader.cleanUp();
 		renderer.cleanUp();

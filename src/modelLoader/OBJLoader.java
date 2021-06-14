@@ -14,10 +14,11 @@ import java.util.List;
 public class OBJLoader {
 
     public static RawModel loadOBjModel(String fileName, Loader loader) {
+
         FileReader fileReader = null;
         try {
-            fileReader = new FileReader(OBJLoader.class.getResource("res/" + fileName + ".obj").getFile());
-        } catch (Exception e) {
+            fileReader = new FileReader("res/" + fileName + ".obj");
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         BufferedReader reader = new BufferedReader(fileReader);
