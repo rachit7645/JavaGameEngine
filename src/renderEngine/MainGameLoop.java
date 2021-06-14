@@ -133,6 +133,7 @@ public class MainGameLoop {
 		MasterRenderer renderer = new MasterRenderer(window);
 
 		currentTerrain = Terrain.getCurrentTerrain(player, terrains);
+		player.getPosition().y = currentTerrain.getHeightOfTerrain(player.getPosition().x, player.getPosition().z);
 
 		startTime = System.currentTimeMillis();
 

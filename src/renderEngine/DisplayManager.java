@@ -4,6 +4,7 @@ import entities.Camera;
 import entities.Keys;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.IntBuffer;
@@ -15,6 +16,7 @@ public class DisplayManager implements Keys {
 
 	private long window;
 	private int iter = 0;
+	private int iter2 = 0;
 	public String gameVersion="Beta 0.2";
 
 	public void run() {
@@ -54,17 +56,24 @@ public class DisplayManager implements Keys {
 
 		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
 			if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
-				if(iter == 0) {
+				if (iter == 0) {
 					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 					iter++;
 				}else{
 					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 					iter--;
 				}
+			}else if(key == GLFW.GLFW_KEY_F2 && action == GLFW.GLFW_RELEASE) {
+				if(iter2 == 0) {
+					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+					iter2++;
+				}else{
+					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
+					iter2--;
+				}
 			}else if (key == GLFW.GLFW_KEY_W) {
 				MainGameLoop.setKey(Keys.KEY_W);
 				MainGameLoop.setToMovePlayer(true);
-
 			}else if (key == GLFW.GLFW_KEY_A) {
 				MainGameLoop.setKey(Keys.KEY_A);
 				MainGameLoop.setToMovePlayer(true);

@@ -10,6 +10,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <lwjgl.version>3.2.3</lwjgl.version>
         <joml.version>1.9.25</joml.version>
+        <pngdecoder.version>1.0</pngdecoder.version>
         <lwjgl.natives>natives-windows</lwjgl.natives>
     </properties>
 
@@ -86,10 +87,9 @@
             <version>${joml.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>RELEASE</version>
-            <scope>compile</scope>
+            <groupId>org.l33tlabs.twl</groupId>
+            <artifactId>pngdecoder</artifactId>
+            <version>${pngdecoder.version}</version>
         </dependency>
     </dependencies>
 
