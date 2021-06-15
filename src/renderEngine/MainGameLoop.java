@@ -134,8 +134,8 @@ public class MainGameLoop {
 		entities.add(player);
 
 		List<GUITexture> guis = new ArrayList<GUITexture>();
-		GUITexture gui = new GUITexture(loader.loadTexture("image.png"),
-				new Vector2f(-0.75f, -0.75f), new Vector2f(0.25f, 0.25f));
+		GUITexture gui = new GUITexture(loader.loadTexture("health.png"),
+				new Vector2f(-0.7f, 0.85f), new Vector2f(0.3f, 0.3f));
 		guis.add(gui);
 
 		MasterRenderer renderer = new MasterRenderer(window);

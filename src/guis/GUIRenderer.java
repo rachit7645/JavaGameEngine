@@ -11,18 +11,16 @@ import toolBox.Maths;
 
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-
 public class GUIRenderer {
 
 	private final RawModel quad;
-	private GuiShader shader;
+	private GUIShader shader;
 
 	public GUIRenderer(Loader loader) {
 
 		float[] positions = {-1 , 1, -1, -1, 1, 1, 1, -1};
 		quad = loader.loadToVAO(positions);
-		shader = new GuiShader();
+		shader = new GUIShader();
 
 	}
 

@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import textureUtils.Texture;
+import textureUtils.TextureLoader;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -63,7 +63,7 @@ public class Loader {
 
     public int loadTexture(String filename) {
 
-        int textureId =  Texture.loadTexture(filename);
+        int textureId =  TextureLoader.loadTexture(filename);
         textures.add(textureId);
         return textureId;
 

@@ -83,8 +83,10 @@ public class MasterRenderer {
             IntBuffer width = BufferUtils.createIntBuffer(1), height = BufferUtils.createIntBuffer(1);
             GLFW.glfwGetFramebufferSize(window, width, height);
 
-            shader.loadProjectionMatrix(createProjectionMatrix(width, height));
-            terrainShader.loadProjectionMatrix(createProjectionMatrix(width,height));
+            Matrix4f projectionMatrix = createProjectionMatrix(width, height);
+
+            shader.loadProjectionMatrix(projectionMatrix);
+            terrainShader.loadProjectionMatrix(projectionMatrix);
 
             GL11.glViewport(0, 0, width.get(0), height.get(0));
             toResize = false;
@@ -136,7 +138,7 @@ public class MasterRenderer {
         try {
 
             float aspectRatio = (float) (x.get(0) / y.get(0));
-            float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))));
+            float y_scale = (float) (1f / Math.tan(Math.toRadians(FOV / 2f)));
             float x_scale = y_scale / aspectRatio;
             float frustum_length = FAR_PLANE - NEAR_PLANE;
 

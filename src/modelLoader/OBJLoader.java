@@ -5,9 +5,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import renderEngine.Loader;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,13 +13,18 @@ public class OBJLoader {
 
     public static RawModel loadOBjModel(String fileName, Loader loader) {
 
-        FileReader fileReader = null;
+        InputStream inputStream = null;
         try {
-            fileReader = new FileReader("res/" + fileName + ".obj");
-        } catch (FileNotFoundException e) {
+            inputStream = OBJLoader.class.getResourceAsStream("models/" + fileName + ".obj");
+        }catch(NullPointerException e) {
             e.printStackTrace();
+            System.exit(-1);
         }
-        BufferedReader reader = new BufferedReader(fileReader);
+        if(inputStream == null) {
+            System.err.println("Could not find file " + fileName + ".obj in directory models/");
+            System.exit(-1);
+        }
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
 
         List<Vector3f> vertices = new ArrayList<Vector3f>();

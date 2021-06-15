@@ -6,14 +6,14 @@ import org.lwjgl.opengl.*;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class Texture {
+public class TextureLoader {
 
     public static int loadTexture(String filename) {
 
         PNGDecoder decoder = null;
 
         try {
-            decoder = new PNGDecoder(Texture.class.getResourceAsStream("res/" + filename));
+            decoder = new PNGDecoder(TextureLoader.class.getResourceAsStream("textures/" + filename));
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Could not get resource " + filename);

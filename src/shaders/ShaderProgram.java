@@ -6,9 +6,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryStack;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.FloatBuffer;
 
 public abstract class ShaderProgram {
@@ -46,12 +44,14 @@ public abstract class ShaderProgram {
     }
 
     public void cleanUp() {
+
         stop();
         GL20.glDetachShader(programID, vertexShaderID);
         GL20.glDetachShader(programID, fragmentShaderID);
         GL20.glDeleteShader(vertexShaderID);
         GL20.glDeleteShader(fragmentShaderID);
         GL20.glDeleteProgram(programID);
+
     }
 
     protected void bindAttribute(int attribute, String variableName) {
@@ -82,24 +82,30 @@ public abstract class ShaderProgram {
     }
 
     protected void loadMatrix(int location, Matrix4f matrix) {
+
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer fb = stack.mallocFloat(16);
             matrix.get(fb);
             GL20.glUniformMatrix4fv(location, false, fb);
         }
+
     }
 
-    private static int loadShader(String file, int type){
+    private static int loadShader(String file, int type) {
+
         StringBuilder shaderSource = new StringBuilder();
 
         try{
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+
+            InputStream inputStream = ShaderProgram.class.getResourceAsStream(file);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
-            while((line = reader.readLine()) != null){
+            while((line = reader.readLine()) != null) {
                 shaderSource.append(line).append("//\n");
             }
+
             reader.close();
-        }catch(IOException e){
+        }catch(IOException | NullPointerException e){
             e.printStackTrace();
             System.exit(-1);
         }
