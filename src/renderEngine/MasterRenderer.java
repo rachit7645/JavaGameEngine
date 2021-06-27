@@ -12,6 +12,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 import shaders.StaticShader;
 import shaders.TerrainShader;
+import skybox.SkyBoxRenderer;
+import skybox.SkyboxShader;
 import terrains.Terrain;
 
 import java.nio.IntBuffer;
@@ -43,23 +45,34 @@ public class MasterRenderer {
     private TerrainShader terrainShader = new TerrainShader();
     private TerrainRenderer terrainRenderer = new TerrainRenderer(terrainShader);
 
+    private SkyboxShader skyboxShader = new SkyboxShader();
+    private SkyBoxRenderer skyBoxRenderer;
+
     private Map<TexturedModel, List<Entity>> entities = new HashMap<TexturedModel, List<Entity>>();
     private List<Terrain> terrains = new ArrayList<Terrain>();
 
-    public MasterRenderer(long window) {
+    public MasterRenderer(long window, Loader loader) {
         this.window = window;
+
+        skyBoxRenderer = new SkyBoxRenderer(loader, skyboxShader);
 
         IntBuffer width = BufferUtils.createIntBuffer(1), height = BufferUtils.createIntBuffer(1);
         GLFW.glfwGetFramebufferSize(window, width, height);
 
+        Matrix4f projectionMatrix = createProjectionMatrix();
+
         shader.start();
-        shader.loadProjectionMatrix(createProjectionMatrix(width, height));
+        shader.loadProjectionMatrix(projectionMatrix);
         shader.stop();
 
         terrainShader.start();
-        terrainShader.loadProjectionMatrix(createProjectionMatrix(width,height));
+        terrainShader.loadProjectionMatrix(projectionMatrix);
         terrainShader.connectTextureUnits();
         terrainShader.stop();
+
+        skyboxShader.start();
+        skyboxShader.loadProjectionMatrix(projectionMatrix);
+        skyboxShader.stop();
 
         GL11.glViewport(0, 0, width.get(0), height.get(0));
 
@@ -83,10 +96,11 @@ public class MasterRenderer {
             IntBuffer width = BufferUtils.createIntBuffer(1), height = BufferUtils.createIntBuffer(1);
             GLFW.glfwGetFramebufferSize(window, width, height);
 
-            Matrix4f projectionMatrix = createProjectionMatrix(width, height);
+            Matrix4f projectionMatrix = createProjectionMatrix();
 
             shader.loadProjectionMatrix(projectionMatrix);
             terrainShader.loadProjectionMatrix(projectionMatrix);
+            skyboxShader.loadProjectionMatrix(projectionMatrix);
 
             GL11.glViewport(0, 0, width.get(0), height.get(0));
             toResize = false;
@@ -110,6 +124,8 @@ public class MasterRenderer {
         terrainRenderer.render(terrains);
         terrainShader.stop();
 
+        skyBoxRenderer.render(camera);
+
         terrains.clear();
         entities.clear();
     }
@@ -131,29 +147,9 @@ public class MasterRenderer {
         }
     }
 
-    public Matrix4f createProjectionMatrix(IntBuffer x, IntBuffer y) {
+    public Matrix4f createProjectionMatrix() {
 
-        Matrix4f projectionMatrix = new Matrix4f();
-
-        try {
-
-            float aspectRatio = (float) (x.get(0) / y.get(0));
-            float y_scale = (float) (1f / Math.tan(Math.toRadians(FOV / 2f)));
-            float x_scale = y_scale / aspectRatio;
-            float frustum_length = FAR_PLANE - NEAR_PLANE;
-
-            projectionMatrix.m00(x_scale);
-            projectionMatrix.m11(y_scale);
-            projectionMatrix.m22(-((FAR_PLANE + NEAR_PLANE)) / frustum_length);
-            projectionMatrix.m23(-1f);
-            projectionMatrix.m32(-(2 * NEAR_PLANE * FAR_PLANE) / frustum_length);
-            projectionMatrix.m33(0);
-
-        }catch(ArithmeticException e) {
-            e.printStackTrace();
-        }
-
-        return projectionMatrix;
+        return new Matrix4f().perspective(FOV, 16f / 9f, NEAR_PLANE, FAR_PLANE);
 
     }
 

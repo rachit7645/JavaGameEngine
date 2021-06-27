@@ -2,11 +2,9 @@ package renderEngine;
 
 import models.RawModel;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
+import org.lwjgl.opengl.*;
 import textureUtils.TextureLoader;
+import textures.TextureData;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -31,12 +29,12 @@ public class Loader {
 
     }
 
-    public RawModel loadToVAO(float[] positions) {
+    public RawModel loadToVAO(float[] positions, int dimensions) {
 
         int vaoID = createVAO();
-        storeDataInAttributeList(0, 2, positions);
+        storeDataInAttributeList(0, dimensions, positions);
         unbindVAO();
-        return new RawModel(vaoID, positions.length / 2);
+        return new RawModel(vaoID, positions.length / dimensions);
 
     }
 
@@ -63,9 +61,52 @@ public class Loader {
 
     public int loadTexture(String filename) {
 
-        int textureId =  TextureLoader.loadTexture(filename);
+        TextureData textureData = TextureLoader.loadTexture(filename);
+
+        int textureId = GL11.glGenTextures();
+
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureId);
+
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+
+        GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.5f);
+
+        GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, textureData.getWidth(), textureData.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, textureData.getImageData());
+
+        GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+
         textures.add(textureId);
+
         return textureId;
+
+    }
+
+    public int loadCubeMap(String[] textureFiles) {
+
+        int textureID = GL11.glGenTextures();
+        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        GL11.glBindTexture(GL13.GL_TEXTURE_CUBE_MAP, textureID);
+        GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
+
+        for(int i = 0; i < textureFiles.length; i++) {
+
+            TextureData data = TextureLoader.loadTexture(textureFiles[i]);
+            GL11.glTexImage2D(GL13.GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
+                    GL11.GL_RGBA, data.getWidth(), data.getHeight(), 0, GL11.GL_RGBA,
+                    GL11.GL_UNSIGNED_BYTE, data.getImageData());
+
+        }
+
+        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+        GL11.glTexParameteri(GL13.GL_TEXTURE_CUBE_MAP, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+
+        textures.add(textureID);
+        return textureID;
 
     }
 

@@ -79,7 +79,7 @@ public class MainGameLoop {
 
 		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
 
-		Light light = new Light(new Vector3f(20000, 40000, 20000), new Vector3f(1, 1, 1));
+		Light light = new Light(new Vector3f(20000, 40000, 20000), new Vector3f(0.5f, 0.5f, 0.5f));
 		Camera camera = new Camera(player);
 
 		List<Terrain> terrains = new ArrayList<Terrain>();
@@ -138,7 +138,7 @@ public class MainGameLoop {
 				new Vector2f(-0.7f, 0.85f), new Vector2f(0.3f, 0.3f));
 		guis.add(gui);
 
-		MasterRenderer renderer = new MasterRenderer(window);
+		MasterRenderer renderer = new MasterRenderer(window, loader);
 		GUIRenderer guiRenderer = new GUIRenderer(loader);
 
 		currentTerrain = Terrain.getCurrentTerrain(player, terrains);
@@ -175,10 +175,13 @@ public class MainGameLoop {
 			currentTime = System.currentTimeMillis();
 
 			if(currentTime >= startTime + 1000) {
-				System.out.println("FPS: " + fps);
+
+				System.out.print("\r");
+				System.out.print("FPS: " + fps);
 				fps = 0;
 				delta = ((currentTime - startTime) / 1000f);
 				startTime = currentTime;
+
 			}else{
 				fps++;
 			}
