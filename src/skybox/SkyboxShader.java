@@ -2,6 +2,7 @@ package skybox;
 
 import entities.Camera;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import shaders.ShaderProgram;
 import toolBox.Maths;
 
@@ -12,11 +13,16 @@ public class SkyboxShader extends ShaderProgram{
 	
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
+	private int location_fogColor;
 	
 	public SkyboxShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
-	
+
+	public void loadFogColor(float r, float g, float b) {
+		super.loadVector(location_fogColor, new Vector3f(r, g, b));
+	}
+
 	public void loadProjectionMatrix(Matrix4f matrix) {
 		super.loadMatrix(location_projectionMatrix, matrix);
 	}
@@ -33,6 +39,7 @@ public class SkyboxShader extends ShaderProgram{
 	protected void getAllUniformLocations() {
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
+		location_fogColor = super.getUniformLocation("fogColor");
 	}
 
 	@Override

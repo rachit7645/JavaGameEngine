@@ -142,7 +142,8 @@ public class MainGameLoop {
 		GUIRenderer guiRenderer = new GUIRenderer(loader);
 
 		currentTerrain = Terrain.getCurrentTerrain(player, terrains);
-		player.getPosition().y = currentTerrain.getHeightOfTerrain(player.getPosition().x, player.getPosition().z);
+		Vector3f playerPosition = player.getPosition();
+		player.getPosition().y = currentTerrain.getHeightOfTerrain(playerPosition.x, playerPosition.z);
 
 		startTime = System.currentTimeMillis();
 
@@ -185,7 +186,6 @@ public class MainGameLoop {
 			}else{
 				fps++;
 			}
-
 			player.gravity(currentTerrain);
 		}
 		loader.cleanUp();
