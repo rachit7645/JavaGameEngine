@@ -47,14 +47,14 @@ public class Maths {
 
     }
 
-    public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos) {
+    public static float barryCentric(Vector3f vec1, Vector3f vec2, Vector3f vec3, Vector2f position) {
 
-        float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
-        float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
-        float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
+        float det = (vec2.z - vec3.z) * (vec1.x - vec3.x) + (vec3.x - vec2.x) * (vec1.z - vec3.z);
+        float l1 = ((vec2.z - vec3.z) * (position.x - vec3.x) + (vec3.x - vec2.x) * (position.y - vec3.z)) / det;
+        float l2 = ((vec3.z - vec1.z) * (position.x - vec3.x) + (vec1.x - vec3.x) * (position.y - vec3.z)) / det;
         float l3 = 1.0f - l1 - l2;
 
-        return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+        return l1 * vec1.y + l2 * vec2.y + l3 * vec3.y;
 
     }
 
