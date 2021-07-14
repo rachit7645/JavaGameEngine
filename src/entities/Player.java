@@ -62,7 +62,15 @@ public class Player extends Entity implements Keys{
 	}
 
 	private void jump(Terrain currentTerrain) {
-		if(super.getPosition().y <= currentTerrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z))
+
+		float terrainHeight;
+
+		if(currentTerrain == null)
+			terrainHeight = 0;
+		else
+			terrainHeight = currentTerrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
+
+		if(super.getPosition().y <= terrainHeight)
 			verticalSpeed = JUMP_HEIGHT;
 		super.increasePosition(0, verticalSpeed, 0);
 	}
