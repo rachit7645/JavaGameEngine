@@ -45,12 +45,14 @@ public class MainGameLoop {
 		RawModel model3 = OBJLoader.loadOBjModel("fern", loader);
 		RawModel model4 = OBJLoader.loadOBjModel("lowPolyTree", loader);
 		RawModel model5 = OBJLoader.loadOBjModel("person", loader);
+		RawModel model6 = OBJLoader.loadOBjModel("lamp", loader);
 
 		ModelTexture treeTexture = new ModelTexture(loader.loadTexture("tree.png"));
 		ModelTexture grassTexture = new ModelTexture(loader.loadTexture("grassTexture.png"));
 		ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fern.png"));
 		ModelTexture lowPolyTreeTexture = new ModelTexture(loader.loadTexture("lowPolyTree.png"));
 		ModelTexture playerTexture = new ModelTexture(loader.loadTexture("playerTexture.png"));
+		ModelTexture lampTexture = new ModelTexture(loader.loadTexture("lamp.png"));
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass.png"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("mud.png"));
@@ -70,6 +72,7 @@ public class MainGameLoop {
 		TexturedModel fernModel = new TexturedModel(model3, fernTexture);
 		TexturedModel lowPolyTreeModel = new TexturedModel(model4, lowPolyTreeTexture);
 		TexturedModel playerModel = new TexturedModel(model5, playerTexture);
+		TexturedModel lampModel = new TexturedModel(model6, lampTexture);
 
 		Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "heightMap.png");
 		Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "heightMap.png");
@@ -80,8 +83,13 @@ public class MainGameLoop {
 		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
 
 		List<Light> lights = new ArrayList<Light>();
-		lights.add(new Light(new Vector3f(20000, 40000, 20000), new Vector3f(1.0f, 1.0f, 1.0f)));
-		lights.add(new Light(new Vector3f(20000, 40000, 20000), new Vector3f(0.0f, 0.0f, 1.0f)));
+		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
+		lights.add(new Light(new Vector3f(185, 10, -293),
+				new Vector3f(2, 0, 0), new Vector3f(1.0f, 0.01f, 0.002f)));
+		lights.add(new Light(new Vector3f(370, 17, -300),
+				new Vector3f(0, 2, 2), new Vector3f(1.0f, 0.01f, 0.002f)));
+		lights.add(new Light(new Vector3f(293, 7, -305),
+				new Vector3f(2, 2, 0), new Vector3f(1.0f, 0.01f, 0.002f)));
 		Camera camera = new Camera(player);
 
 		List<Terrain> terrains = new ArrayList<Terrain>();
@@ -92,7 +100,7 @@ public class MainGameLoop {
 
 		List<Entity> entities = new ArrayList<Entity>();
 
-		for(int i = 0; i < 400; i++) {
+		for(int i = 0; i < 100; i++) {
 			if(i % 7 == 0) {
 
 				float grassXPos = random.nextFloat() * 400 - 200;
@@ -134,6 +142,9 @@ public class MainGameLoop {
 		}
 
 		entities.add(player);
+		entities.add(new Entity(lampModel, new Vector3f(185, -4.7f, -293), 0, 0, 0, 1));
+		entities.add(new Entity(lampModel, new Vector3f(370, 4.2f, -300), 0, 0, 0, 1));
+		entities.add(new Entity(lampModel, new Vector3f(293, -6.8f, -305), 0, 0, 0, 1));
 
 		List<GUITexture> guis = new ArrayList<GUITexture>();
 		GUITexture gui = new GUITexture(loader.loadTexture("health.png"),
@@ -144,6 +155,7 @@ public class MainGameLoop {
 		GUIRenderer guiRenderer = new GUIRenderer(loader);
 
 		currentTerrain = Terrain.getCurrentTerrain(player, terrains);
+		player.setPosition(new Vector3f(185, 10, -293));
 		Vector3f playerPosition = player.getPosition();
 		player.getPosition().y = currentTerrain.getHeightOfTerrain(playerPosition.x, playerPosition.z);
 
