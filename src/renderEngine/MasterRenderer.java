@@ -90,7 +90,7 @@ public class MasterRenderer {
         GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
-    public void render(Light light, Camera camera) {
+    public void render(List<Light> lights, Camera camera) {
 
         if(toResize) {
             IntBuffer width = BufferUtils.createIntBuffer(1), height = BufferUtils.createIntBuffer(1);
@@ -110,7 +110,7 @@ public class MasterRenderer {
 
         shader.start();
         shader.loadSkyColor(RED, GREEN, BLUE);
-        shader.loadLight(light);
+        shader.loadLights(lights);
         shader.loadViewMatrix(camera);
 
         entityRenderer.render(entities);
@@ -118,7 +118,7 @@ public class MasterRenderer {
 
         terrainShader.start();
         terrainShader.loadSkyColor(RED, GREEN, BLUE);
-        terrainShader.loadLight(light);
+        terrainShader.loadLights(lights);
         terrainShader.loadViewMatrix(camera);
 
         terrainRenderer.render(terrains);

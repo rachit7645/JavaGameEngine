@@ -79,7 +79,9 @@ public class MainGameLoop {
 
 		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
 
-		Light light = new Light(new Vector3f(20000, 40000, 20000), new Vector3f(0.5f, 0.5f, 0.5f));
+		List<Light> lights = new ArrayList<Light>();
+		lights.add(new Light(new Vector3f(20000, 40000, 20000), new Vector3f(1.0f, 1.0f, 1.0f)));
+		lights.add(new Light(new Vector3f(20000, 40000, 20000), new Vector3f(0.0f, 0.0f, 1.0f)));
 		Camera camera = new Camera(player);
 
 		List<Terrain> terrains = new ArrayList<Terrain>();
@@ -167,7 +169,7 @@ public class MainGameLoop {
 				renderer.processTerrain(cTerrain);
 			}
 
-			renderer.render(light, camera);
+			renderer.render(lights, camera);
 			guiRenderer.render(guis);
 
 			GLFW.glfwSwapBuffers(window);

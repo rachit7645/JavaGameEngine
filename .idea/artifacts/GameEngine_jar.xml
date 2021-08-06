@@ -1,26 +1,27 @@
 <component name="ArtifactManager">
-  <artifact type="jar" name="GameEngine:jar">
+  <artifact name="GameEngine:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/GameEngine_jar</output-path>
-    <root id="archive" name="GameEngine.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+    <root id="root">
+      <element id="archive" name="GameEngine.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="GameEngine" />
       </element>
-      <element id="module-output" name="GameEngine" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.2.3/lwjgl-opengl-3.2.3-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-assimp/3.2.3/lwjgl-assimp-3.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.2.3/lwjgl-glfw-3.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.2.3/lwjgl-stb-3.2.3-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-openal/3.2.3/lwjgl-openal-3.2.3-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/joml/joml/1.9.25/joml-1.9.25.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.2.3/lwjgl-3.2.3-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/20.1.0/annotations-20.1.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-openal/3.2.3/lwjgl-openal-3.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl/3.2.3/lwjgl-3.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-assimp/3.2.3/lwjgl-assimp-3.2.3-natives-windows.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-stb/3.2.3/lwjgl-stb-3.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/l33tlabs/twl/pngdecoder/1.0/pngdecoder-1.0.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-opengl/3.2.3/lwjgl-opengl-3.2.3.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/lwjgl/lwjgl-glfw/3.2.3/lwjgl-glfw-3.2.3-natives-windows.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Maven: org.l33tlabs.twl:pngdecoder:1.0" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-assimp:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-opengl:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-openal:natives-windows:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-openal:3.2.3" />
+      <element id="library" level="project" name="Maven: org.joml:joml:1.9.25" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-opengl:natives-windows:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-stb:natives-windows:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-stb:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-glfw:natives-windows:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-glfw:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl-assimp:natives-windows:3.2.3" />
+      <element id="library" level="project" name="Maven: org.lwjgl:lwjgl:natives-windows:3.2.3" />
     </root>
   </artifact>
 </component>
