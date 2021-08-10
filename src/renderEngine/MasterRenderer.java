@@ -6,6 +6,7 @@ import entities.Light;
 import models.TexturedModel;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -82,14 +83,14 @@ public class MasterRenderer {
 	};
 
 	public void renderScene(List<Entity> entities, List<Terrain> terrains,
-							List<Light> lights, Camera camera) {
+							List<Light> lights, Camera camera, Vector4f clipPlane) {
 		for(Entity entity : entities)
 			processEntity(entity);
 		for(Terrain cTerrain : terrains) {
 			processTerrain(cTerrain);
 		}
 
-		render(lights, camera);
+		render(lights, camera, clipPlane);
 	}
 
 	public static void enableCulling() {
@@ -101,7 +102,7 @@ public class MasterRenderer {
 		GL11.glDisable(GL11.GL_CULL_FACE);
 	}
 
-	public void render(List<Light> lights, Camera camera) {
+	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {
 
 		if(toResize) {
 			IntBuffer width = BufferUtils.createIntBuffer(1), height = BufferUtils.createIntBuffer(1);
@@ -120,6 +121,7 @@ public class MasterRenderer {
 		prepare();
 
 		shader.start();
+		shader.loadClipPlane(clipPlane);
 		shader.loadSkyColor(RED, GREEN, BLUE);
 		shader.loadLights(lights);
 		shader.loadViewMatrix(camera);
@@ -128,6 +130,7 @@ public class MasterRenderer {
 		shader.stop();
 
 		terrainShader.start();
+		terrainShader.loadClipPlane(clipPlane);
 		terrainShader.loadSkyColor(RED, GREEN, BLUE);
 		terrainShader.loadLights(lights);
 		terrainShader.loadViewMatrix(camera);

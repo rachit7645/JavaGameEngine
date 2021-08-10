@@ -4,6 +4,7 @@ import entities.Camera;
 import entities.Light;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import toolBox.Maths;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class StaticShader extends ShaderProgram{
     private int location_reflectivity;
     private int location_useFakeLighting;
     private int location_skyColor;
+    private int location_plane;
 
     public StaticShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -47,6 +49,7 @@ public class StaticShader extends ShaderProgram{
         location_reflectivity = super.getUniformLocation("reflectivity");
         location_useFakeLighting = super.getUniformLocation("useFakeLighting");
         location_skyColor = super.getUniformLocation("skyColor");
+        location_plane = super.getUniformLocation("plane");
 
         location_lightPosition = new int[MAX_LIGHTS];
         location_lightColour = new int[MAX_LIGHTS];
@@ -58,6 +61,10 @@ public class StaticShader extends ShaderProgram{
             location_attenuation[i] = super.getUniformLocation("attenuation[" + i + "]");
         }
 
+    }
+
+    public void loadClipPlane(Vector4f clipPlane) {
+        super.loadVector(location_plane, clipPlane);
     }
 
     public void loadSkyColor(float r, float g, float b) {

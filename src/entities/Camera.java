@@ -40,6 +40,10 @@ public class Camera implements Keys{
 
 	}
 
+	public void invertPitch() {
+		this.pitch = -this.pitch;
+	}
+
 	private void calculateCameraPosition(float hDistance, float vDistance) {
 
 		float theta = player.getRotY() + angleAroundPlayer;

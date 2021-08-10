@@ -7,6 +7,7 @@ import models.RawModel;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
@@ -18,10 +19,13 @@ public class WaterRenderer {
 
 	private RawModel quad;
 	private WaterShader shader;
+	private WaterFrameBuffers fbos;
 
-	public WaterRenderer(Loader loader, WaterShader shader, Matrix4f projection) {
+	public WaterRenderer(Loader loader, WaterShader shader, Matrix4f projection, WaterFrameBuffers fbos) {
 		this.shader = shader;
+		this.fbos = fbos;
 		this.shader.start();
+		this.shader.connectTextureUnits();
 		this.shader.loadProjectionMatrix(projection);
 		this.shader.stop();
 		setUpVAO(loader);
@@ -44,6 +48,10 @@ public class WaterRenderer {
 		shader.loadViewMatrix(camera);
 		GL30.glBindVertexArray(quad.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getReflectionTexture());
+		GL13.glActiveTexture(GL13.GL_TEXTURE1);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionTexture());
 	}
 	
 	private void unbind(){

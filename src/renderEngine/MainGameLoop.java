@@ -11,8 +11,10 @@ import models.RawModel;
 import models.TexturedModel;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
@@ -127,15 +129,13 @@ public class MainGameLoop {
 		Vector3f playerPosition = player.getPosition();
 		playerPosition.y = currentTerrain.getHeightOfTerrain(playerPosition.x, playerPosition.z);
 
+		WaterFrameBuffers buffers = new WaterFrameBuffers(window);
+
 		WaterShader waterShader = new WaterShader();
-		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.createProjectionMatrix());
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.createProjectionMatrix(), buffers);
 
 		List<WaterTile> waters = new ArrayList<WaterTile>();
 		waters.add(new WaterTile(75, -75, 9.5f));
-
-		WaterFrameBuffers fbos = new WaterFrameBuffers(window);
-		GUITexture gui = new GUITexture(fbos.getReflectionTexture(), new Vector2f(-0.5f, 0.5f), new Vector2f(0.5f, 0.5f));
-		guis.add(gui);
 
 		startTime = System.currentTimeMillis();
 
@@ -159,11 +159,22 @@ public class MainGameLoop {
 				waterShader.loadProjectionMatrix(MasterRenderer.createProjectionMatrix());
 			}
 
-			fbos.bindReflectionFrameBuffer();
-			renderer.renderScene(entities, terrains, lights, camera);
-			fbos.unbindCurrentFrameBuffer(window);
+			GL11.glEnable(GL11.GL_CLIP_PLANE0);
 
-			renderer.renderScene(entities, terrains, lights, camera);
+			buffers.bindReflectionFrameBuffer();
+			float distance = 2 * (camera.getPosition().y - waters.get(0).getHeight());
+			camera.getPosition().y -= distance;
+			camera.invertPitch();
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
+			camera.getPosition().y += distance;
+			camera.invertPitch();
+
+			buffers.bindRefractionFrameBuffer();
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, waters.get(0).getHeight()));
+
+			GL11.glDisable(GL11.GL_CLIP_PLANE0);
+			buffers.unbindCurrentFrameBuffer(window);
+			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, 15));
 			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
 
@@ -189,7 +200,7 @@ public class MainGameLoop {
 		loader.cleanUp();
 		renderer.cleanUp();
 		waterShader.cleanUp();
-		fbos.cleanUp();
+		buffers.cleanUp();
 		guiRenderer.cleanUp();
 
 		GL.destroy();
