@@ -17,7 +17,7 @@ public class Camera implements Keys{
 
 	private static boolean isMouseButton1Down = false;
 
-	private Vector3f position = new Vector3f(100,15,50);
+	private Vector3f position;
 	private float yaw = 0;
 	private float roll = 0;
 
@@ -25,6 +25,7 @@ public class Camera implements Keys{
 
 	public Camera(Player player) {
 		this.player = player;
+		this.position = player.getPosition().add(0, 50, 0);
 	}
 
 	public void move() {

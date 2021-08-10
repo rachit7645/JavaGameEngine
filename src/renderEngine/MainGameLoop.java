@@ -17,6 +17,10 @@ import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import water.WaterFrameBuffers;
+import water.WaterRenderer;
+import water.WaterShader;
+import water.WaterTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,19 +47,13 @@ public class MainGameLoop {
 		// Rawmodels go here
 
 		RawModel model1 = OBJLoader.loadOBjModel("tree", loader);
-		RawModel model2 = OBJLoader.loadOBjModel("grassModel", loader);
-		RawModel model3 = OBJLoader.loadOBjModel("fern", loader);
 		RawModel model4 = OBJLoader.loadOBjModel("lowPolyTree", loader);
 		RawModel model5 = OBJLoader.loadOBjModel("person", loader);
-		RawModel model6 = OBJLoader.loadOBjModel("lamp", loader);
 
 		// Textures go here
 		ModelTexture treeTexture = new ModelTexture(loader.loadTexture("tree.png"));
-		ModelTexture grassTexture = new ModelTexture(loader.loadTexture("grassTexture.png"));
-		ModelTexture fernTexture = new ModelTexture(loader.loadTexture("fern.png"));
 		ModelTexture lowPolyTreeTexture = new ModelTexture(loader.loadTexture("lowPolyTree.png"));
 		ModelTexture playerTexture = new ModelTexture(loader.loadTexture("playerTexture.png"));
-		ModelTexture lampTexture = new ModelTexture(loader.loadTexture("lamp.png"));
 
 		// Terrain texture stuff
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grass.png"));
@@ -68,102 +66,56 @@ public class MainGameLoop {
 
 		// Transparency things
 
-		grassTexture.setHasTransparency(true);
-		grassTexture.setUseFakeLighting(true);
-		fernTexture.setHasTransparency(true);
-		fernTexture.setUseFakeLighting(true);
-
 		// TexturedModels go here
 
 		TexturedModel treeModel = new TexturedModel(model1, treeTexture);
-		TexturedModel grassModel = new TexturedModel(model2, grassTexture);
-		TexturedModel fernModel = new TexturedModel(model3, fernTexture);
 		TexturedModel lowPolyTreeModel = new TexturedModel(model4, lowPolyTreeTexture);
 		TexturedModel playerModel = new TexturedModel(model5, playerTexture);
-		TexturedModel lampModel = new TexturedModel(model6, lampTexture);
 
 		// Terrains go here
 
-		Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "heightMap.png");
-		Terrain terrain2 = new Terrain(-1,-1, loader, texturePack, blendMap, "heightMap.png");
-		Terrain terrain3 = new Terrain(0,0, loader, texturePack, blendMap, "heightMap.png");
-		Terrain terrain4 = new Terrain(-1,0, loader, texturePack, blendMap, "heightMap.png");
+		Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "heightmapwater.png");
 		Terrain currentTerrain;
 
 		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
+		Camera camera = new Camera(player);
 
 		// Lights go here
 
 		List<Light> lights = new ArrayList<Light>();
-		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(0.4f, 0.4f, 0.4f)));
-		lights.add(new Light(new Vector3f(185, 10, -293),
-				new Vector3f(2, 0, 0), new Vector3f(1.0f, 0.01f, 0.002f)));
-		lights.add(new Light(new Vector3f(370, 17, -300),
-				new Vector3f(0, 2, 2), new Vector3f(1.0f, 0.01f, 0.002f)));
-		lights.add(new Light(new Vector3f(293, 7, -305),
-				new Vector3f(2, 2, 0), new Vector3f(1.0f, 0.01f, 0.002f)));
-		Camera camera = new Camera(player);
+		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1.0f, 1.0f, 1.0f)));
 
 		List<Terrain> terrains = new ArrayList<Terrain>();
 		terrains.add(terrain);
-		terrains.add(terrain2);
-		terrains.add(terrain3);
-		terrains.add(terrain4);
 
 		List<Entity> entities = new ArrayList<Entity>();
 
 		// Generate random positions for trees and stuff
 
-		for(int i = 0; i < 100; i++) {
-			if(i % 7 == 0) {
-
-				float grassXPos = random.nextFloat() * 400 - 200;
-				float grassZPos = random.nextFloat() * -400;
-
-				currentTerrain = Terrain.getCurrentTerrain(grassXPos, grassZPos, terrains);
-
-				entities.add(new Entity(grassModel, new Vector3f(grassXPos, currentTerrain.getHeightOfTerrain(grassXPos, grassZPos),
-						grassZPos), 0, 0, 0, 1.8f));
-			}
+		for(int i = 0; i < 20; i++) {
 			if(i % 3 == 0){
 
-				float treeXPos = random.nextFloat() * 800 - 400;
-				float treeZPos = random.nextFloat() * -600;
+				float treeXPos = random.nextFloat() * 200 - 100;
+				float treeZPos = random.nextFloat() * -100;
 
 				currentTerrain = Terrain.getCurrentTerrain(treeXPos, treeZPos, terrains);
 
-				entities.add(new Entity(treeModel, new Vector3f(treeXPos, currentTerrain.getHeightOfTerrain(treeXPos, treeZPos),
+				entities.add(new Entity(treeModel, new Vector3f(treeXPos, currentTerrain == null ? 0 : currentTerrain.getHeightOfTerrain(treeXPos, treeZPos),
 						treeZPos), 0, 0, 0, 9f));
 
-				float lowPolyTreeXPos = random.nextFloat() * 900 - 400;
-				float lowPolyTreeZPos = random.nextFloat() * -700;
+				float lowPolyTreeXPos = random.nextFloat() * 300 - 100;
+				float lowPolyTreeZPos = random.nextFloat() * -150;
 
 				currentTerrain = Terrain.getCurrentTerrain(lowPolyTreeXPos, lowPolyTreeZPos, terrains);
 
-				entities.add(new Entity(lowPolyTreeModel, new Vector3f(lowPolyTreeXPos, currentTerrain.getHeightOfTerrain(
+				entities.add(new Entity(lowPolyTreeModel, new Vector3f(lowPolyTreeXPos, currentTerrain == null ? 0 :  currentTerrain.getHeightOfTerrain(
 						lowPolyTreeXPos, lowPolyTreeZPos), lowPolyTreeZPos), 0, 0, 0, 0.9f));
-			}
-			if(i % 5 == 0) {
-
-				float fernXPos = random.nextFloat() * 400 - 200;
-				float fernZPos = random.nextFloat() * -400;
-
-				currentTerrain = Terrain.getCurrentTerrain(fernXPos, fernZPos, terrains);
-
-				entities.add(new Entity(fernModel, new Vector3f(fernXPos, currentTerrain.getHeightOfTerrain(fernXPos, fernZPos),
-						fernZPos), 0, random.nextFloat() * 360, 0, 0.9f));
 			}
 		}
 
 		entities.add(player);
-		entities.add(new Entity(lampModel, new Vector3f(185, -4.7f, -293), 0, 0, 0, 1));
-		entities.add(new Entity(lampModel, new Vector3f(370, 4.2f, -300), 0, 0, 0, 1));
-		entities.add(new Entity(lampModel, new Vector3f(293, -6.8f, -305), 0, 0, 0, 1));
 
 		List<GUITexture> guis = new ArrayList<GUITexture>();
-		GUITexture gui = new GUITexture(loader.loadTexture("health.png"),
-				new Vector2f(-0.7f, 0.85f), new Vector2f(0.3f, 0.3f));
-		guis.add(gui);
 
 		MasterRenderer renderer = new MasterRenderer(window, loader);
 		GUIRenderer guiRenderer = new GUIRenderer(loader);
@@ -171,9 +123,19 @@ public class MainGameLoop {
 		// Set this so that the player is not floating
 
 		currentTerrain = Terrain.getCurrentTerrain(player, terrains);
-		player.setPosition(new Vector3f(185, 10, -293));
+		player.setPosition(new Vector3f(75, 0, -75));
 		Vector3f playerPosition = player.getPosition();
-		player.getPosition().y = currentTerrain.getHeightOfTerrain(playerPosition.x, playerPosition.z);
+		playerPosition.y = currentTerrain.getHeightOfTerrain(playerPosition.x, playerPosition.z);
+
+		WaterShader waterShader = new WaterShader();
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.createProjectionMatrix());
+
+		List<WaterTile> waters = new ArrayList<WaterTile>();
+		waters.add(new WaterTile(75, -75, 9.5f));
+
+		WaterFrameBuffers fbos = new WaterFrameBuffers(window);
+		GUITexture gui = new GUITexture(fbos.getReflectionTexture(), new Vector2f(-0.5f, 0.5f), new Vector2f(0.5f, 0.5f));
+		guis.add(gui);
 
 		startTime = System.currentTimeMillis();
 
@@ -193,13 +155,16 @@ public class MainGameLoop {
 				toMoveCamera = false;
 			}
 
-			for(Entity entity : entities)
-				renderer.processEntity(entity);
-			for(Terrain cTerrain : terrains) {
-				renderer.processTerrain(cTerrain);
+			if(MasterRenderer.toResize) {
+				waterShader.loadProjectionMatrix(MasterRenderer.createProjectionMatrix());
 			}
 
-			renderer.render(lights, camera);
+			fbos.bindReflectionFrameBuffer();
+			renderer.renderScene(entities, terrains, lights, camera);
+			fbos.unbindCurrentFrameBuffer(window);
+
+			renderer.renderScene(entities, terrains, lights, camera);
+			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
 
 			GLFW.glfwSwapBuffers(window);
@@ -215,13 +180,16 @@ public class MainGameLoop {
 				delta = ((currentTime - startTime) / 1000f);
 				startTime = currentTime;
 
-			}else{
+			}
+			else {
 				fps++;
 			}
 			player.gravity(currentTerrain);
 		}
 		loader.cleanUp();
 		renderer.cleanUp();
+		waterShader.cleanUp();
+		fbos.cleanUp();
 		guiRenderer.cleanUp();
 
 		GL.destroy();
