@@ -1,4 +1,4 @@
-package modelLoader;
+package toolBox;
 
 import models.RawModel;
 import org.joml.Vector2f;
@@ -15,7 +15,7 @@ public class OBJLoader {
 
         InputStream inputStream = null;
         try {
-            inputStream = OBJLoader.class.getResourceAsStream("models/" + fileName + ".obj");
+            inputStream = OBJLoader.class.getResourceAsStream("/res/models/" + fileName + ".obj");
         }catch(NullPointerException e) {
             e.printStackTrace();
             System.exit(-1);

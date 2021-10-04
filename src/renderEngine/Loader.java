@@ -3,7 +3,7 @@ package renderEngine;
 import models.RawModel;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
-import textureUtils.TextureLoader;
+import toolBox.TextureLoader;
 import textures.TextureData;
 
 import java.nio.FloatBuffer;

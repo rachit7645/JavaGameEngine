@@ -1,7 +1,6 @@
-package textureUtils;
+package toolBox;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
-import org.lwjgl.opengl.*;
 import textures.TextureData;
 
 import java.io.IOException;
@@ -14,7 +13,7 @@ public class TextureLoader {
         PNGDecoder decoder = null;
 
         try {
-            decoder = new PNGDecoder(TextureLoader.class.getResourceAsStream("textures/" + filename));
+            decoder = new PNGDecoder(TextureLoader.class.getResourceAsStream("/res/textures/" + filename));
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Could not get resource " + filename);
@@ -31,7 +30,7 @@ public class TextureLoader {
         ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
         try {
             decoder.decode(buffer, decoder.getWidth() * 4, format);
-        }catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         buffer.flip();
