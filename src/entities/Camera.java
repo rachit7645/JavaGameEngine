@@ -1,7 +1,6 @@
 package entities;
 
 import org.joml.Vector3f;
-import renderEngine.MainGameLoop;
 
 public class Camera implements Keys{
 
@@ -14,8 +13,6 @@ public class Camera implements Keys{
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
 	private float pitch = 20;
-
-	private static boolean isMouseButton1Down = false;
 
 	private Vector3f position;
 	private float yaw = 0;
@@ -41,7 +38,7 @@ public class Camera implements Keys{
 	}
 
 	public void invertPitch() {
-		this.pitch = -this.pitch;
+		pitch = -pitch;
 	}
 
 	private void calculateCameraPosition(float hDistance, float vDistance) {
@@ -74,10 +71,8 @@ public class Camera implements Keys{
 	}
 
 	private void calculatePitch() {
-		if(isMouseButton1Down) {
 			float pitchChange = getDY() * 0.1f;
 			pitch -= pitchChange;
-		}
 	}
 
 	private void calculateAngleAroundPlayer() {
@@ -147,9 +142,5 @@ public class Camera implements Keys{
 
 	public static void setMouseScrollY(float mouseScrollY) {
 		Camera.mouseScrollY = mouseScrollY;
-	}
-
-	public static void setIsMouseButton1Down(boolean isMouseButton1Down) {
-		Camera.isMouseButton1Down = isMouseButton1Down;
 	}
 }

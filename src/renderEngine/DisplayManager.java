@@ -125,12 +125,7 @@ public class DisplayManager implements Keys {
 			Inputs.setToMoveCamera(true);
 		});
 
-		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
-			if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action==GLFW.GLFW_PRESS)
-				Camera.setIsMouseButton1Down(true);
-			else if(button == GLFW.GLFW_MOUSE_BUTTON_LEFT && action==GLFW.GLFW_RELEASE)
-				Camera.setIsMouseButton1Down(false);
-		});
+		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {});
 
 		GLFW.glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
 			Camera.setMouseScrollY((float) yOffset);

@@ -2,6 +2,7 @@
 
 in vec4 clipSpace;
 in vec2 textureCoords;
+in vec3 toCameraVector;
 
 out vec4 out_Color;
 
@@ -32,6 +33,9 @@ void main(void) {
 	vec4 reflectColour = texture(reflectionTexture, reflectTexCoords);
 	vec4 refractionColour = texture(refractionTexture, refractTexCoords);
 
-	out_Color = mix(reflectColour, refractionColour, 0.5f);
+	vec3 viewVector = normalize(toCameraVector);
+	float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
+
+	out_Color = mix(reflectColour, refractionColour, refractiveFactor);
 
 }
