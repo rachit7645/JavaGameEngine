@@ -156,21 +156,7 @@ public class MainGameLoop {
 
 			handleEvents(player, camera);
 
-			GL11.glEnable(GL11.GL_CLIP_PLANE0);
-
-			buffers.bindReflectionFrameBuffer();
-			float distance = 2 * (camera.getPosition().y - waters.get(0).getHeight());
-			camera.getPosition().y -= distance;
-			camera.invertPitch();
-			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
-			camera.getPosition().y += distance;
-			camera.invertPitch();
-
-			buffers.bindRefractionFrameBuffer();
-			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, waters.get(0).getHeight()));
-
-			GL11.glDisable(GL11.GL_CLIP_PLANE0);
-			buffers.unbindCurrentFrameBuffer(window);
+			drawWaterFBOS(camera);
 			renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, 15));
 			waterRenderer.render(waters, camera);
 			guiRenderer.render(guis);
@@ -178,23 +164,31 @@ public class MainGameLoop {
 			GLFW.glfwSwapBuffers(window);
 			GLFW.glfwPollEvents();
 
-			currentTime = System.currentTimeMillis();
-
-			if (currentTime >= startTime + 1000) {
-
-				System.out.print("\r");
-				System.out.print("FPS: " + fps);
-				fps = 0;
-				delta = ((currentTime - startTime) / 1000f);
-				startTime = currentTime;
-
-			} else {
-				fps++;
-			}
+			calculateFPS();
 			player.gravity(currentTerrain);
 		}
 		cleanUp();
 
+	}
+
+	private void drawWaterFBOS(Camera camera) {
+		GL11.glEnable(GL11.GL_CLIP_PLANE0);
+
+		buffers.bindReflectionFrameBuffer();
+		float distance = 2 * (camera.getPosition().y - waters.get(0).getHeight());
+		camera.getPosition().y -= distance;
+		camera.invertPitch();
+		renderer.renderScene(entities, terrains, lights, camera,
+							 new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
+		camera.getPosition().y += distance;
+		camera.invertPitch();
+
+		buffers.bindRefractionFrameBuffer();
+		renderer.renderScene(entities, terrains, lights, camera,
+							 new Vector4f(0, -1, 0, waters.get(0).getHeight()));
+
+		GL11.glDisable(GL11.GL_CLIP_PLANE0);
+		buffers.unbindCurrentFrameBuffer(window);
 	}
 
 	private void handleEvents(Player player, Camera camera) {
@@ -215,6 +209,22 @@ public class MainGameLoop {
 			waterShader.loadProjectionMatrix(MasterRenderer.createProjectionMatrix());
 		}
 
+	}
+
+	private void calculateFPS() {
+		currentTime = System.currentTimeMillis();
+
+		if (currentTime >= startTime + 1000) {
+
+			System.out.print("\r");
+			System.out.print("FPS: " + fps);
+			fps = 0;
+			delta = ((currentTime - startTime) / 1000f);
+			startTime = currentTime;
+
+		} else {
+			fps++;
+		}
 	}
 
 	private void cleanUp() {
