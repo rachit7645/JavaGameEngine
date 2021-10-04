@@ -4,12 +4,6 @@ import org.joml.Vector3f;
 
 public class Camera implements Keys{
 
-	private static float cursorXPos = 0;
-	private static float cursorYPos = 0;
-	private static float oldCursorXPos;
-	private static float oldCursorYPos;
-	private static float mouseScrollY = 0;
-
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
 	private float pitch = 20;
@@ -65,9 +59,9 @@ public class Camera implements Keys{
 	}
 
 	private void calculateZoom() {
-		float zoomLevel = mouseScrollY * 10f;
+		float zoomLevel = Inputs.mouseScrollY * 10f;
 		distanceFromPlayer -= zoomLevel;
-		mouseScrollY = 0;
+		Inputs.mouseScrollY = 0;
 	}
 
 	private void calculatePitch() {
@@ -78,38 +72,6 @@ public class Camera implements Keys{
 	private void calculateAngleAroundPlayer() {
 		float angleChange = getDX() * 0.3f;
 		angleAroundPlayer -= angleChange;
-	}
-
-	public static float getCursorXPos() {
-		return cursorXPos;
-	}
-
-	public static void setCursorXPos(float cursorXPos) {
-		Camera.cursorXPos = cursorXPos;
-	}
-
-	public static float getCursorYPos() {
-		return cursorYPos;
-	}
-
-	public static void setCursorYPos(float cursorYPos) {
-		Camera.cursorYPos = cursorYPos;
-	}
-
-	public static float getOldCursorXPos() {
-		return oldCursorXPos;
-	}
-
-	public static void setOldCursorXPos(float oldCursorXPos) {
-		Camera.oldCursorXPos = oldCursorXPos;
-	}
-
-	public static float getOldCursorYPos() {
-		return oldCursorYPos;
-	}
-
-	public static void setOldCursorYPos(float oldCursorYPos) {
-		Camera.oldCursorYPos = oldCursorYPos;
 	}
 
 	public Vector3f getPosition() {
@@ -133,14 +95,11 @@ public class Camera implements Keys{
 	}
 
 	private float getDX() {
-		return getCursorXPos() - getOldCursorXPos();
+		return Inputs.getCursorXPos() - Inputs.getOldCursorXPos();
 	}
 
 	private float getDY() {
-		return getCursorYPos() - getOldCursorYPos();
+		return Inputs.getCursorYPos() - Inputs.getOldCursorYPos();
 	}
 
-	public static void setMouseScrollY(float mouseScrollY) {
-		Camera.mouseScrollY = mouseScrollY;
-	}
 }

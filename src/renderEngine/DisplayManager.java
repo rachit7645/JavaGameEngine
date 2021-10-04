@@ -1,6 +1,5 @@
 package renderEngine;
 
-import entities.Camera;
 import entities.Inputs;
 import entities.Keys;
 import org.lwjgl.Version;
@@ -118,17 +117,17 @@ public class DisplayManager implements Keys {
 		GLFW.glfwSetWindowSizeCallback(window, (window, width, height) -> MasterRenderer.setToResize(true));
 
 		GLFW.glfwSetCursorPosCallback(window, (window, xPos, yPos) -> {
-			Camera.setOldCursorXPos(Camera.getCursorXPos());
-			Camera.setOldCursorYPos(Camera.getCursorYPos());
-			Camera.setCursorXPos((float) xPos);
-			Camera.setCursorYPos((float) yPos);
+			Inputs.setOldCursorXPos(Inputs.getCursorXPos());
+			Inputs.setOldCursorYPos(Inputs.getCursorYPos());
+			Inputs.setCursorXPos((float) xPos);
+			Inputs.setCursorYPos((float) yPos);
 			Inputs.setToMoveCamera(true);
 		});
 
 		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {});
 
 		GLFW.glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
-			Camera.setMouseScrollY((float) yOffset);
+			Inputs.setMouseScrollY((float) yOffset);
 			Inputs.setToMoveCamera(true);
 		});
 
