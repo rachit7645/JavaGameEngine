@@ -38,7 +38,7 @@ public class MasterRenderer {
 	private static final float BLUE = 238.0f/255.0f;
 	private static final float GREEN = 213.0f/255.0f;
 
-	public static boolean toResize;
+	private static boolean toResize;
 
 	private StaticShader shader = new StaticShader();
 	private EntityRenderer entityRenderer = new EntityRenderer(shader);

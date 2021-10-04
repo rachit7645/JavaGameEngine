@@ -16,6 +16,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class DisplayManager implements Keys {
 
 	private long window;
+
 	private boolean iterator = false;
 	private boolean iterator2 = false;
 	public String gameVersion="Alpha 0.4";
@@ -40,6 +41,7 @@ public class DisplayManager implements Keys {
 	}
 
 	private void init() {
+
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		if (!GLFW.glfwInit())

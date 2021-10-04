@@ -154,21 +154,7 @@ public class MainGameLoop {
 
 		while (!GLFW.glfwWindowShouldClose(window)) {
 
-			if (Inputs.isToMovePlayer()) {
-				currentTerrain = Terrain.getCurrentTerrain(player, terrains);
-				player.move(Inputs.getKey(), currentTerrain);
-				camera.move();
-				Inputs.setToMovePlayer(false);
-			}
-
-			if (Inputs.isToMoveCamera()) {
-				camera.move();
-				Inputs.setToMoveCamera(false);
-			}
-
-			if (MasterRenderer.toResize) {
-				waterShader.loadProjectionMatrix(MasterRenderer.createProjectionMatrix());
-			}
+			handleEvents(player, camera);
 
 			GL11.glEnable(GL11.GL_CLIP_PLANE0);
 
@@ -208,6 +194,26 @@ public class MainGameLoop {
 			player.gravity(currentTerrain);
 		}
 		cleanUp();
+
+	}
+
+	private void handleEvents(Player player, Camera camera) {
+
+		if (Inputs.isToMovePlayer()) {
+			Terrain currentTerrain = Terrain.getCurrentTerrain(player, terrains);
+			player.move(Inputs.getKey(), currentTerrain);
+			camera.move();
+			Inputs.setToMovePlayer(false);
+		}
+
+		if (Inputs.isToMoveCamera()) {
+			camera.move();
+			Inputs.setToMoveCamera(false);
+		}
+
+		if (MasterRenderer.getToResize()) {
+			waterShader.loadProjectionMatrix(MasterRenderer.createProjectionMatrix());
+		}
 
 	}
 
