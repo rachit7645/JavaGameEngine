@@ -1,6 +1,7 @@
 package renderEngine;
 
 import entities.Camera;
+import entities.Inputs;
 import entities.Keys;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.*;
@@ -17,7 +18,7 @@ public class DisplayManager implements Keys {
 	private long window;
 	private boolean iterator = false;
 	private boolean iterator2 = false;
-	public String gameVersion="Alpha 0.3";
+	public String gameVersion="Alpha 0.4";
 
 	public void run() {
 		System.out.println("[INFO] :Starting, Using LWJGL " + Version.getVersion());
@@ -27,7 +28,8 @@ public class DisplayManager implements Keys {
 		init();
 
 		System.out.println("[INFO] :Starting Loop");
-		MainGameLoop.loop(window);
+		MainGameLoop mainGameLoop = new MainGameLoop(window);
+		mainGameLoop.loop();
 
 		Callbacks.glfwFreeCallbacks(window);
 		GLFW.glfwDestroyWindow(window);
@@ -81,33 +83,33 @@ public class DisplayManager implements Keys {
 				if (!iterator) {
 					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 					iterator = true;
-				}else{
+				} else {
 					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 					iterator = false;
 				}
-			}else if(key == GLFW.GLFW_KEY_F2 && action == GLFW.GLFW_RELEASE) {
+			} else if(key == GLFW.GLFW_KEY_F2 && action == GLFW.GLFW_RELEASE) {
 				if(!iterator2) {
 					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 					iterator2 = true;
-				}else{
+				} else {
 					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
 					iterator2 = false;
 				}
-			}else if (key == GLFW.GLFW_KEY_W) {
-				MainGameLoop.setKey(Keys.KEY_W);
-				MainGameLoop.setToMovePlayer(true);
-			}else if (key == GLFW.GLFW_KEY_A) {
-				MainGameLoop.setKey(Keys.KEY_A);
-				MainGameLoop.setToMovePlayer(true);
-			}else if (key == GLFW.GLFW_KEY_S) {
-				MainGameLoop.setKey(Keys.KEY_S);
-				MainGameLoop.setToMovePlayer(true);
-			}else if (key == GLFW.GLFW_KEY_D) {
-				MainGameLoop.setKey(Keys.KEY_D);
-				MainGameLoop.setToMovePlayer(true);
-			}else if (key == GLFW.GLFW_KEY_SPACE) {
-				MainGameLoop.setKey(Keys.KEY_SPACEBAR);
-				MainGameLoop.setToMovePlayer(true);
+			} else if (key == GLFW.GLFW_KEY_W) {
+				Inputs.setKey(Keys.KEY_W);
+				Inputs.setToMovePlayer(true);
+			} else if (key == GLFW.GLFW_KEY_A) {
+				Inputs.setKey(Keys.KEY_A);
+				Inputs.setToMovePlayer(true);
+			} else if (key == GLFW.GLFW_KEY_S) {
+				Inputs.setKey(Keys.KEY_S);
+				Inputs.setToMovePlayer(true);
+			} else if (key == GLFW.GLFW_KEY_D) {
+				Inputs.setKey(Keys.KEY_D);
+				Inputs.setToMovePlayer(true);
+			} else if (key == GLFW.GLFW_KEY_SPACE) {
+				Inputs.setKey(Keys.KEY_SPACEBAR);
+				Inputs.setToMovePlayer(true);
 			}
 		});
 
@@ -118,7 +120,7 @@ public class DisplayManager implements Keys {
 			Camera.setOldCursorYPos(Camera.getCursorYPos());
 			Camera.setCursorXPos((float) xPos);
 			Camera.setCursorYPos((float) yPos);
-			MainGameLoop.setToMoveCamera(true);
+			Inputs.setToMoveCamera(true);
 		});
 
 		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
@@ -130,7 +132,7 @@ public class DisplayManager implements Keys {
 
 		GLFW.glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
 			Camera.setMouseScrollY((float) yOffset);
-			MainGameLoop.setToMoveCamera(true);
+			Inputs.setToMoveCamera(true);
 		});
 
 	}

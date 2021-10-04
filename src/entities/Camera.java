@@ -32,7 +32,7 @@ public class Camera implements Keys{
 
 		calculateZoom();
 		calculatePitch();
-		if(MainGameLoop.isToMoveCamera())
+		if(Inputs.isToMoveCamera())
 			calculateAngleAroundPlayer();
 		float hDistance = calculateHorizontalDistance();
 		float vDistance = calculateVerticalDistance();

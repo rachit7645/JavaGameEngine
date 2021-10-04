@@ -43,7 +43,7 @@ public class WaterRenderer {
 		unbind();
 	}
 	
-	private void prepareRender(Camera camera){
+	private void prepareRender(Camera camera) {
 		shader.start();
 		shader.loadViewMatrix(camera);
 		GL30.glBindVertexArray(quad.getVaoID());
@@ -54,7 +54,7 @@ public class WaterRenderer {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, fbos.getRefractionTexture());
 	}
 	
-	private void unbind(){
+	private void unbind() {
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 		shader.stop();

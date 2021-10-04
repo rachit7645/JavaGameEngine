@@ -101,6 +101,7 @@ public class Terrain {
             e.printStackTrace();
         }
 
+        assert image != null;
         int VERTEX_COUNT = image.getHeight();
         heights = new float[VERTEX_COUNT][VERTEX_COUNT];
 
@@ -188,21 +189,7 @@ public class Terrain {
     }
 
     public static Terrain getCurrentTerrain(Entity entity, List<Terrain> terrains) {
-
-        float gridX = (float) Math.floor(entity.getPosition().x / Terrain.SIZE);
-        float gridZ = (float) Math.floor(entity.getPosition().z / Terrain.SIZE);
-
-        Terrain currentTerrain = null;
-
-        for(Terrain terrain : terrains) {
-            if(gridX == terrain.gridX && gridZ == terrain.gridZ) {
-                currentTerrain = terrain;
-                break;
-            }
-        }
-
-        return currentTerrain;
-
+        return getCurrentTerrain(entity.getPosition().x, entity.getPosition().z, terrains);
     }
 
     public static Terrain getCurrentTerrain(float x, float z, List<Terrain> terrains) {

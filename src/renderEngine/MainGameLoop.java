@@ -1,9 +1,6 @@
 package renderEngine;
 
-import entities.Camera;
-import entities.Entity;
-import entities.Light;
-import entities.Player;
+import entities.*;
 import guis.GUIRenderer;
 import guis.GUITexture;
 import modelLoader.OBJLoader;
@@ -30,21 +27,53 @@ import java.util.Random;
 
 public class MainGameLoop {
 
-	private static long startTime;
-	private static long currentTime;
+	private long window;
+
+	private Loader loader;
+	private Random random;
+
+	private List<Light> lights;
+	private List<Terrain> terrains;
+	private List<Entity> entities;
+	private List<GUITexture> guis;
+
+	private MasterRenderer renderer;
+	private GUIRenderer guiRenderer;
+
+	private WaterFrameBuffers buffers;
+
+	private WaterShader waterShader;
+	private WaterRenderer waterRenderer;
+	private List<WaterTile> waters;
+
+	private long startTime;
+	private long currentTime;
+	private long fps = 0;
+
 	private static float delta;
-	private static long fps = 0;
 
-	private static boolean toMovePlayer = false;
-	private static boolean toMoveCamera = false;
-	private static int key;
-
-	public static void loop(long window) {
+	public MainGameLoop(long window) {
+		this.window = window;
 
 		GL.createCapabilities();
 
-		Loader loader = new Loader();
-		Random random = new Random(676452);
+		loader = new Loader();
+		random = new Random(69420);
+
+		lights = new ArrayList<>();
+		terrains = new ArrayList<>();
+		entities = new ArrayList<>();
+		guis = new ArrayList<>();
+		waters = new ArrayList<>();
+
+		renderer = new MasterRenderer(window, loader);
+		guiRenderer = new GUIRenderer(loader);
+		waterShader = new WaterShader();
+		buffers = new WaterFrameBuffers(window);
+		waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.createProjectionMatrix(), buffers);
+	}
+
+	public void loop() {
 
 		// Rawmodels go here
 
@@ -76,26 +105,20 @@ public class MainGameLoop {
 
 		// Terrains go here
 
-		Terrain terrain = new Terrain(0,-1, loader, texturePack, blendMap, "heightmapwater.png");
+		Terrain terrain = new Terrain(0, -1, loader, texturePack, blendMap, "heightmapwater.png");
 		Terrain currentTerrain;
 
-		Player player = new Player(playerModel, new Vector3f(100,0,-50), 0, 0, 0, 1f);
+		Player player = new Player(playerModel, new Vector3f(100, 0, -50), 0, 0, 0, 1f);
 		Camera camera = new Camera(player);
 
 		// Lights go here
-
-		List<Light> lights = new ArrayList<Light>();
 		lights.add(new Light(new Vector3f(0, 1000, -7000), new Vector3f(1.0f, 1.0f, 1.0f)));
-
-		List<Terrain> terrains = new ArrayList<Terrain>();
 		terrains.add(terrain);
-
-		List<Entity> entities = new ArrayList<Entity>();
 
 		// Generate random positions for trees and stuff
 
-		for(int i = 0; i < 20; i++) {
-			if(i % 3 == 0){
+		for (int i = 0; i < 10; i++) {
+			if (i % 3 == 0) {
 
 				float treeXPos = random.nextFloat() * 200 - 100;
 				float treeZPos = random.nextFloat() * -100;
@@ -110,17 +133,12 @@ public class MainGameLoop {
 
 				currentTerrain = Terrain.getCurrentTerrain(lowPolyTreeXPos, lowPolyTreeZPos, terrains);
 
-				entities.add(new Entity(lowPolyTreeModel, new Vector3f(lowPolyTreeXPos, currentTerrain == null ? 0 :  currentTerrain.getHeightOfTerrain(
+				entities.add(new Entity(lowPolyTreeModel, new Vector3f(lowPolyTreeXPos, currentTerrain == null ? 0 : currentTerrain.getHeightOfTerrain(
 						lowPolyTreeXPos, lowPolyTreeZPos), lowPolyTreeZPos), 0, 0, 0, 0.9f));
 			}
 		}
 
 		entities.add(player);
-
-		List<GUITexture> guis = new ArrayList<GUITexture>();
-
-		MasterRenderer renderer = new MasterRenderer(window, loader);
-		GUIRenderer guiRenderer = new GUIRenderer(loader);
 
 		// Set this so that the player is not floating
 
@@ -129,33 +147,27 @@ public class MainGameLoop {
 		Vector3f playerPosition = player.getPosition();
 		playerPosition.y = currentTerrain.getHeightOfTerrain(playerPosition.x, playerPosition.z);
 
-		WaterFrameBuffers buffers = new WaterFrameBuffers(window);
-
-		WaterShader waterShader = new WaterShader();
-		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, MasterRenderer.createProjectionMatrix(), buffers);
-
-		List<WaterTile> waters = new ArrayList<WaterTile>();
 		waters.add(new WaterTile(75, -75, 9.5f));
 
 		startTime = System.currentTimeMillis();
 
 		// Main loop
 
-		while(!GLFW.glfwWindowShouldClose(window)) {
+		while (!GLFW.glfwWindowShouldClose(window)) {
 
-			if(toMovePlayer) {
+			if (Inputs.isToMovePlayer()) {
 				currentTerrain = Terrain.getCurrentTerrain(player, terrains);
-				player.move(key, currentTerrain);
+				player.move(Inputs.getKey(), currentTerrain);
 				camera.move();
-				toMovePlayer = false;
+				Inputs.setToMovePlayer(false);
 			}
 
-			if(toMoveCamera) {
+			if (Inputs.isToMoveCamera()) {
 				camera.move();
-				toMoveCamera = false;
+				Inputs.setToMoveCamera(false);
 			}
 
-			if(MasterRenderer.toResize) {
+			if (MasterRenderer.toResize) {
 				waterShader.loadProjectionMatrix(MasterRenderer.createProjectionMatrix());
 			}
 
@@ -183,7 +195,7 @@ public class MainGameLoop {
 
 			currentTime = System.currentTimeMillis();
 
-			if(currentTime >= startTime + 1000) {
+			if (currentTime >= startTime + 1000) {
 
 				System.out.print("\r");
 				System.out.print("FPS: " + fps);
@@ -191,38 +203,27 @@ public class MainGameLoop {
 				delta = ((currentTime - startTime) / 1000f);
 				startTime = currentTime;
 
-			}
-			else {
+			} else {
 				fps++;
 			}
 			player.gravity(currentTerrain);
 		}
+		cleanUp();
+
+	}
+
+	private void cleanUp() {
+
 		loader.cleanUp();
 		renderer.cleanUp();
 		waterShader.cleanUp();
 		buffers.cleanUp();
 		guiRenderer.cleanUp();
-
 		GL.destroy();
+
 	}
 
 	public static float getDelta() {
 		return delta;
-	}
-
-	public static void setToMovePlayer(boolean toMovePlayer) {
-		MainGameLoop.toMovePlayer = toMovePlayer;
-	}
-
-	public static void setKey(int key) {
-		MainGameLoop.key = key;
-	}
-
-	public static void setToMoveCamera(boolean toMoveCamera) {
-		MainGameLoop.toMoveCamera = toMoveCamera;
-	}
-
-	public static boolean isToMoveCamera() {
-		return toMoveCamera;
 	}
 }
