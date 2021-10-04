@@ -71,7 +71,7 @@ public class DisplayManager implements Keys {
 		}
 
 		GLFW.glfwMakeContextCurrent(window);
-		GLFW.glfwSwapInterval(0);
+		GLFW.glfwSwapInterval(1);
 		GLFW.glfwShowWindow(window);
 
 		GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
