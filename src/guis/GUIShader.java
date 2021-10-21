@@ -6,8 +6,8 @@ import shaders.ShaderProgram;
 
 public class GUIShader extends ShaderProgram{
 	
-	private static final String VERTEX_FILE = "shaderFiles/guiVertexShader.glsl";
-	private static final String FRAGMENT_FILE = "shaderFiles/guiFragmentShader.glsl";
+	private static final String VERTEX_FILE = "shaders/guiVertexShader.glsl";
+	private static final String FRAGMENT_FILE = "shaders/guiFragmentShader.glsl";
 	
 	private int location_transformationMatrix;
 

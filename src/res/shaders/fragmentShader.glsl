@@ -44,7 +44,7 @@ void main(void) {
 
     totalDiffuse = max(totalDiffuse, vec3(0.2));
 
-    if(textureColor.a < 0.5) {
+    if (textureColor.a < 0.5) {
         discard;
     }
 

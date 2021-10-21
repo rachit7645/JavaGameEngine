@@ -12,7 +12,7 @@ uniform sampler2D reflectionTexture;
 uniform sampler2D refractionTexture;
 uniform sampler2D dudvMap;
 
-const float waveStrength = 0.02f;
+const float waveStrength = 0.01f;
 
 void main(void) {
 
@@ -35,6 +35,7 @@ void main(void) {
 
 	vec3 viewVector = normalize(toCameraVector);
 	float refractiveFactor = dot(viewVector, vec3(0.0, 1.0, 0.0));
+	refractiveFactor = pow(refractiveFactor, 0.7f);
 
 	out_Color = mix(reflectColour, refractionColour, refractiveFactor);
 
