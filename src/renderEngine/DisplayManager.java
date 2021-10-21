@@ -1,7 +1,6 @@
 package renderEngine;
 
 import entities.Inputs;
-import entities.Keys;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL11;
@@ -12,12 +11,12 @@ import java.nio.IntBuffer;
 import static org.lwjgl.system.MemoryStack.stackPush;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
-public class DisplayManager implements Keys {
+public class DisplayManager {
 
 	private long window;
 
-	private boolean iterator = false;
-	private boolean iterator2 = false;
+	private boolean showCursor = false;
+	private boolean wireframe = false;
 	public String gameVersion="Alpha 0.4";
 
 	public void run() {
@@ -81,37 +80,50 @@ public class DisplayManager implements Keys {
 
 		GLFW.glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
 			if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
-				if (!iterator) {
+				if (!showCursor) {
 					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
-					iterator = true;
+					showCursor = true;
 				} else {
 					GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
-					iterator = false;
+					showCursor = false;
 				}
-			} else if(key == GLFW.GLFW_KEY_F2 && action == GLFW.GLFW_RELEASE) {
-				if(!iterator2) {
+			}
+
+			if(key == GLFW.GLFW_KEY_F2 && action == GLFW.GLFW_RELEASE) {
+				if(!wireframe) {
 					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
-					iterator2 = true;
+					wireframe = true;
 				} else {
 					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-					iterator2 = false;
+					wireframe = false;
 				}
-			} else if (key == GLFW.GLFW_KEY_W) {
-				Inputs.setKey(Keys.KEY_W);
-				Inputs.setToMovePlayer(true);
-			} else if (key == GLFW.GLFW_KEY_A) {
-				Inputs.setKey(Keys.KEY_A);
-				Inputs.setToMovePlayer(true);
-			} else if (key == GLFW.GLFW_KEY_S) {
-				Inputs.setKey(Keys.KEY_S);
-				Inputs.setToMovePlayer(true);
-			} else if (key == GLFW.GLFW_KEY_D) {
-				Inputs.setKey(Keys.KEY_D);
-				Inputs.setToMovePlayer(true);
-			} else if (key == GLFW.GLFW_KEY_SPACE) {
-				Inputs.setKey(Keys.KEY_SPACEBAR);
-				Inputs.setToMovePlayer(true);
 			}
+
+			if (key == GLFW.GLFW_KEY_W && action == GLFW.GLFW_PRESS)
+				Inputs.setIsWPressed(true);
+			else if (key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_PRESS)
+				Inputs.setIsSPressed(true);
+
+			if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_PRESS)
+				Inputs.setIsAPressed(true);
+			else if (key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_PRESS)
+				Inputs.setIsDPressed(true);
+
+			if (key == GLFW.GLFW_KEY_SPACE && action == GLFW.GLFW_PRESS)
+				Inputs.setIsSpacebarPressed(true);
+
+			if (key == GLFW.GLFW_KEY_W && action == GLFW.GLFW_RELEASE)
+				Inputs.setIsWPressed(false);
+			else if (key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_RELEASE)
+				Inputs.setIsSPressed(false);
+
+			if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_RELEASE)
+				Inputs.setIsAPressed(false);
+			else if (key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_RELEASE)
+				Inputs.setIsDPressed(false);
+
+			if (key == GLFW.GLFW_KEY_SPACE && action == GLFW.GLFW_RELEASE)
+				Inputs.setIsSpacebarPressed(false);
 		});
 
 		GLFW.glfwSetWindowSizeCallback(window, (window, width, height) -> MasterRenderer.setToResize(true));

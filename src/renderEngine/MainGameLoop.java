@@ -193,12 +193,9 @@ public class MainGameLoop {
 
 	private void handleEvents(Player player, Camera camera) {
 
-		if (Inputs.isToMovePlayer()) {
-			Terrain currentTerrain = Terrain.getCurrentTerrain(player, terrains);
-			player.move(Inputs.getKey(), currentTerrain);
-			camera.move();
-			Inputs.setToMovePlayer(false);
-		}
+		Terrain currentTerrain = Terrain.getCurrentTerrain(player, terrains);
+		player.move(currentTerrain);
+		camera.move();
 
 		if (Inputs.isToMoveCamera()) {
 			camera.move();

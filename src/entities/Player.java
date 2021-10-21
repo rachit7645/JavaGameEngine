@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import renderEngine.MainGameLoop;
 import terrains.Terrain;
 
-public class Player extends Entity implements Keys{
+public class Player extends Entity {
 
 	private static final float RUN_SPEED = 5;
 	private static final float TURN_SPEED = 15;
@@ -22,10 +22,10 @@ public class Player extends Entity implements Keys{
 		super(model, position, rotX, rotY, rotZ, scale);
 	}
 
-	public void move(int key, Terrain currentTerrain) {
+	public void move(Terrain currentTerrain) {
 
 		if (toMove) {
-			checkInput(key, currentTerrain);
+			checkInput(currentTerrain);
 
 			super.increaseRotation(0, currentTurnSpeed * MainGameLoop.getDelta(), 0);
 
@@ -40,23 +40,23 @@ public class Player extends Entity implements Keys{
 		}
 	}
 
-	private void checkInput(int key,Terrain currentTerrain) {
+	private void checkInput(Terrain currentTerrain) {
 
-		if (key == KEY_W)
+		if (Inputs.isIsWPressed())
 			this.currentSpeed = RUN_SPEED;
-		else if (key == KEY_S)
+		else if (Inputs.isIsSPressed())
 			this.currentSpeed = -RUN_SPEED;
 		else
 			this.currentSpeed = 0;
 
-		if(key == KEY_D)
+		if(Inputs.isIsDPressed())
 			this.currentTurnSpeed = -TURN_SPEED;
-		else if (key == KEY_A)
+		else if (Inputs.isIsAPressed())
 			this.currentTurnSpeed = TURN_SPEED;
 		else
 			this.currentTurnSpeed = 0;
 
-		if(key == KEY_SPACEBAR)
+		if(Inputs.isIsSpacebarPressed())
 			jump(currentTerrain);
 
 	}

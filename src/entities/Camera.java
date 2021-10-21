@@ -2,7 +2,7 @@ package entities;
 
 import org.joml.Vector3f;
 
-public class Camera implements Keys{
+public class Camera {
 
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
@@ -22,9 +22,10 @@ public class Camera implements Keys{
 	public void move() {
 
 		calculateZoom();
-		calculatePitch();
-		if(Inputs.isToMoveCamera())
+		if(Inputs.isToMoveCamera()) {
+			calculatePitch();
 			calculateAngleAroundPlayer();
+		}
 		float hDistance = calculateHorizontalDistance();
 		float vDistance = calculateVerticalDistance();
 		calculateCameraPosition(hDistance, vDistance);
@@ -65,8 +66,8 @@ public class Camera implements Keys{
 	}
 
 	private void calculatePitch() {
-			float pitchChange = getDY() * 0.1f;
-			pitch -= pitchChange;
+		float pitchChange = getDY() * 0.1f;
+		pitch -= pitchChange;
 	}
 
 	private void calculateAngleAroundPlayer() {

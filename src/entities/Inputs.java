@@ -4,12 +4,56 @@ public class Inputs {
 
 	private static boolean toMovePlayer = false;
 	private static boolean toMoveCamera = false;
-	private static int key;
+	private static boolean isWPressed = false;
+	private static boolean isAPressed = false;
+	private static boolean isSPressed = false;
+	private static boolean isDPressed = false;
+	private static boolean isSpacebarPressed = false;
 	private static float cursorXPos = 0;
 	private static float cursorYPos = 0;
 	private static float oldCursorXPos;
 	private static float oldCursorYPos;
 	static float mouseScrollY = 0;
+
+	public static boolean isIsWPressed() {
+		return isWPressed;
+	}
+
+	public static void setIsWPressed(boolean isWPressed) {
+		Inputs.isWPressed = isWPressed;
+	}
+
+	public static boolean isIsAPressed() {
+		return isAPressed;
+	}
+
+	public static void setIsAPressed(boolean isAPressed) {
+		Inputs.isAPressed = isAPressed;
+	}
+
+	public static boolean isIsSPressed() {
+		return isSPressed;
+	}
+
+	public static void setIsSPressed(boolean isSPressed) {
+		Inputs.isSPressed = isSPressed;
+	}
+
+	public static boolean isIsDPressed() {
+		return isDPressed;
+	}
+
+	public static void setIsDPressed(boolean isDPressed) {
+		Inputs.isDPressed = isDPressed;
+	}
+
+	public static boolean isIsSpacebarPressed() {
+		return isSpacebarPressed;
+	}
+
+	public static void setIsSpacebarPressed(boolean isSpacebarPressed) {
+		Inputs.isSpacebarPressed = isSpacebarPressed;
+	}
 
 	public static boolean isToMovePlayer() {
 		return toMovePlayer;
@@ -25,14 +69,6 @@ public class Inputs {
 
 	public static void setToMoveCamera(boolean toMoveCamera) {
 		Inputs.toMoveCamera = toMoveCamera;
-	}
-
-	public static int getKey() {
-		return key;
-	}
-
-	public static void setKey(int key) {
-		Inputs.key = key;
 	}
 
 	public static float getCursorXPos() {
