@@ -8,8 +8,8 @@
     <properties>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <lwjgl.version>3.2.3</lwjgl.version>
-        <joml.version>1.9.25</joml.version>
+        <lwjgl.version>3.3.0</lwjgl.version>
+        <joml.version>1.10.2</joml.version>
         <pngdecoder.version>1.0</pngdecoder.version>
         <lwjgl.natives>natives-windows</lwjgl.natives>
     </properties>
