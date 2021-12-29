@@ -22,7 +22,7 @@ public class Camera {
 	public void move() {
 
 		calculateZoom();
-		if(Inputs.isToMoveCamera()) {
+		if (Inputs.isToMoveCamera()) {
 			calculatePitch();
 			calculateAngleAroundPlayer();
 		}
@@ -38,16 +38,16 @@ public class Camera {
 
 	private void calculateCameraPosition(float hDistance, float vDistance) {
 
-		float theta = player.getRotY() + angleAroundPlayer;
+		Vector3f playerPosition = player.getPosition();
+		float playerRotationY = player.getRotY();
+
+		float theta = playerRotationY + angleAroundPlayer;
 		float offsetX = (float) (hDistance * Math.sin(Math.toRadians(theta)));
 		float offsetZ = (float) (hDistance * Math.cos(Math.toRadians(theta)));
-		position.x = player.getPosition().x - offsetX;
-		position.z = player.getPosition().z - offsetZ;
-		if(player.getPosition().y == 0)
-			position.y = player.getPosition().y + vDistance;
-		else
-			position.y = vDistance;
-		this.yaw = 180 - (player.getRotY() + angleAroundPlayer);
+		position.x = playerPosition.x - offsetX;
+		position.z = playerPosition.z - offsetZ;
+		position.y = vDistance;
+		yaw = 180 - (playerRotationY + angleAroundPlayer);
 
 	}
 

@@ -1,8 +1,5 @@
 package water;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
-
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -10,18 +7,21 @@ import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL32;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
 public class WaterFrameBuffers {
 
 	protected static final int REFLECTION_WIDTH = 320;
 	private static final int REFLECTION_HEIGHT = 180;
-	
+
 	protected static final int REFRACTION_WIDTH = 1280;
 	private static final int REFRACTION_HEIGHT = 720;
 
 	private int reflectionFrameBuffer;
 	private int reflectionTexture;
 	private int reflectionDepthBuffer;
-	
+
 	private int refractionFrameBuffer;
 	private int refractionTexture;
 	private int refractionDepthTexture;
@@ -41,13 +41,13 @@ public class WaterFrameBuffers {
 	}
 
 	public void bindReflectionFrameBuffer() {//call before rendering to this FBO
-		bindFrameBuffer(reflectionFrameBuffer,REFLECTION_WIDTH,REFLECTION_HEIGHT);
+		bindFrameBuffer(reflectionFrameBuffer, REFLECTION_WIDTH, REFLECTION_HEIGHT);
 	}
-	
+
 	public void bindRefractionFrameBuffer() {//call before rendering to this FBO
-		bindFrameBuffer(refractionFrameBuffer,REFRACTION_WIDTH,REFRACTION_HEIGHT);
+		bindFrameBuffer(refractionFrameBuffer, REFRACTION_WIDTH, REFRACTION_HEIGHT);
 	}
-	
+
 	public void unbindCurrentFrameBuffer(long window) {//call to switch to default frame buffer
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
 		IntBuffer width = BufferUtils.createIntBuffer(1), height = BufferUtils.createIntBuffer(1);
@@ -58,30 +58,30 @@ public class WaterFrameBuffers {
 	public int getReflectionTexture() {//get the resulting texture
 		return reflectionTexture;
 	}
-	
+
 	public int getRefractionTexture() {//get the resulting texture
 		return refractionTexture;
 	}
-	
-	public int getRefractionDepthTexture(){//get the resulting depth texture
+
+	public int getRefractionDepthTexture() {//get the resulting depth texture
 		return refractionDepthTexture;
 	}
 
 	private void initialiseReflectionFrameBuffer(long window) {
 		reflectionFrameBuffer = createFrameBuffer();
-		reflectionTexture = createTextureAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
-		reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
+		reflectionTexture = createTextureAttachment(REFLECTION_WIDTH, REFLECTION_HEIGHT);
+		reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH, REFLECTION_HEIGHT);
 		unbindCurrentFrameBuffer(window);
 	}
-	
+
 	private void initialiseRefractionFrameBuffer(long window) {
 		refractionFrameBuffer = createFrameBuffer();
-		refractionTexture = createTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
-		refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
+		refractionTexture = createTextureAttachment(REFRACTION_WIDTH, REFRACTION_HEIGHT);
+		refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH, REFRACTION_HEIGHT);
 		unbindCurrentFrameBuffer(window);
 	}
-	
-	private void bindFrameBuffer(int frameBuffer, int width, int height){
+
+	private void bindFrameBuffer(int frameBuffer, int width, int height) {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);//To make sure the texture isn't bound
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, frameBuffer);
 		GL11.glViewport(0, 0, width, height);
@@ -97,7 +97,7 @@ public class WaterFrameBuffers {
 		return frameBuffer;
 	}
 
-	private int createTextureAttachment( int width, int height) {
+	private int createTextureAttachment(int width, int height) {
 		int texture = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, width, height,
@@ -108,8 +108,8 @@ public class WaterFrameBuffers {
 				texture, 0);
 		return texture;
 	}
-	
-	private int createDepthTextureAttachment(int width, int height){
+
+	private int createDepthTextureAttachment(int width, int height) {
 		int texture = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL14.GL_DEPTH_COMPONENT32, width, height,

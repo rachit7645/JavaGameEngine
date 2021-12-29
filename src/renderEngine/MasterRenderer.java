@@ -5,7 +5,6 @@ import entities.Entity;
 import entities.Light;
 import models.TexturedModel;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
@@ -34,9 +33,9 @@ public class MasterRenderer {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 1000f;
 
-	private static final float RED = 184.0f/255.0f;
-	private static final float BLUE = 238.0f/255.0f;
-	private static final float GREEN = 213.0f/255.0f;
+	private static final float RED = 184.0f / 255.0f;
+	private static final float BLUE = 238.0f / 255.0f;
+	private static final float GREEN = 213.0f / 255.0f;
 
 	private static boolean toResize;
 
@@ -80,13 +79,15 @@ public class MasterRenderer {
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glEnable(GL14.GL_MULTISAMPLE);
 		enableCulling();
-	};
+	}
+
+	;
 
 	public void renderScene(List<Entity> entities, List<Terrain> terrains,
 							List<Light> lights, Camera camera, Vector4f clipPlane) {
-		for(Entity entity : entities)
+		for (Entity entity : entities)
 			processEntity(entity);
-		for(Terrain cTerrain : terrains) {
+		for (Terrain cTerrain : terrains) {
 			processTerrain(cTerrain);
 		}
 
@@ -104,7 +105,7 @@ public class MasterRenderer {
 
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane) {
 
-		if(toResize) {
+		if (toResize) {
 			IntBuffer width = BufferUtils.createIntBuffer(1), height = BufferUtils.createIntBuffer(1);
 			GLFW.glfwGetFramebufferSize(window, width, height);
 
@@ -152,9 +153,9 @@ public class MasterRenderer {
 		TexturedModel entityModel = entity.getModel();
 		List<Entity> batch = entities.get(entityModel);
 
-		if(batch != null) {
+		if (batch != null) {
 			batch.add(entity);
-		}else{
+		} else {
 			List<Entity> newBatch = new ArrayList<Entity>();
 			newBatch.add(entity);
 			entities.put(entityModel, newBatch);
@@ -162,9 +163,7 @@ public class MasterRenderer {
 	}
 
 	public static Matrix4f createProjectionMatrix() {
-
 		return new Matrix4f().perspective(FOV, 16f / 9f, NEAR_PLANE, FAR_PLANE);
-
 	}
 
 	public void cleanUp() {

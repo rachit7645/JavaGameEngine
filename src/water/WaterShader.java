@@ -1,9 +1,9 @@
 package water;
 
+import entities.Camera;
 import org.joml.Matrix4f;
 import shaders.ShaderProgram;
 import toolBox.Maths;
-import entities.Camera;
 
 public class WaterShader extends ShaderProgram {
 
@@ -41,7 +41,6 @@ public class WaterShader extends ShaderProgram {
 	}
 
 
-
 	public void loadMoveFactor(float value) {
 		super.loadFloat(location_moveFactor, value);
 	}
@@ -55,14 +54,14 @@ public class WaterShader extends ShaderProgram {
 	public void loadProjectionMatrix(Matrix4f projection) {
 		loadMatrix(location_projectionMatrix, projection);
 	}
-	
-	public void loadViewMatrix(Camera camera){
+
+	public void loadViewMatrix(Camera camera) {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 		super.loadVector(location_cameraPosition, camera.getPosition());
 	}
 
-	public void loadModelMatrix(Matrix4f modelMatrix){
+	public void loadModelMatrix(Matrix4f modelMatrix) {
 		loadMatrix(location_modelMatrix, modelMatrix);
 	}
 

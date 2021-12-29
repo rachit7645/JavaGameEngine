@@ -3,7 +3,6 @@ package renderEngine;
 import entities.*;
 import guis.GUIRenderer;
 import guis.GUITexture;
-import toolBox.OBJLoader;
 import models.RawModel;
 import models.TexturedModel;
 import org.joml.Vector3f;
@@ -15,6 +14,7 @@ import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import toolBox.OBJLoader;
 import water.WaterFrameBuffers;
 import water.WaterRenderer;
 import water.WaterShader;
@@ -165,7 +165,6 @@ public class MainGameLoop {
 			GLFW.glfwPollEvents();
 
 			calculateFPS();
-			player.gravity(currentTerrain);
 		}
 		cleanUp();
 
@@ -179,13 +178,13 @@ public class MainGameLoop {
 		camera.getPosition().y -= distance;
 		camera.invertPitch();
 		renderer.renderScene(entities, terrains, lights, camera,
-							 new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
+				new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
 		camera.getPosition().y += distance;
 		camera.invertPitch();
 
 		buffers.bindRefractionFrameBuffer();
 		renderer.renderScene(entities, terrains, lights, camera,
-							 new Vector4f(0, -1, 0, waters.get(0).getHeight()));
+				new Vector4f(0, -1, 0, waters.get(0).getHeight()));
 
 		GL11.glDisable(GL11.GL_CLIP_PLANE0);
 		buffers.unbindCurrentFrameBuffer(window);

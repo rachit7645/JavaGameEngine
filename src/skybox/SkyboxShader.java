@@ -7,7 +7,7 @@ import renderEngine.MainGameLoop;
 import shaders.ShaderProgram;
 import toolBox.Maths;
 
-public class SkyboxShader extends ShaderProgram{
+public class SkyboxShader extends ShaderProgram {
 
 	private static final String VERTEX_FILE = "shaders/skyboxVertexShader.glsl";
 	private static final String FRAGMENT_FILE = "shaders/skyboxFragmentShader.glsl";
@@ -19,7 +19,7 @@ public class SkyboxShader extends ShaderProgram{
 	private int location_fogColor;
 
 	private float rotation = 0;
-	
+
 	public SkyboxShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	}
@@ -41,7 +41,7 @@ public class SkyboxShader extends ShaderProgram{
 		matrix.rotateY((float) Math.toRadians(rotation));
 		super.loadMatrix(location_viewMatrix, matrix);
 	}
-	
+
 	@Override
 	protected void getAllUniformLocations() {
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");

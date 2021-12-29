@@ -2,7 +2,10 @@ package renderEngine;
 
 import entities.Inputs;
 import org.lwjgl.Version;
-import org.lwjgl.glfw.*;
+import org.lwjgl.glfw.Callbacks;
+import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
@@ -17,7 +20,7 @@ public class DisplayManager {
 
 	private boolean showCursor = false;
 	private boolean wireframe = false;
-	public String gameVersion="Alpha 0.4";
+	public String gameVersion = "Alpha 0.4";
 
 	public void run() {
 		System.out.println("[INFO] :Starting, Using LWJGL " + Version.getVersion());
@@ -52,7 +55,7 @@ public class DisplayManager {
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 3);
 
-		window = GLFW.glfwCreateWindow(1366, 768, "A Game By RachitCodes: "+gameVersion, GLFW.glfwGetPrimaryMonitor(), NULL);
+		window = GLFW.glfwCreateWindow(1366, 768, "A Game By RachitCodes: " + gameVersion, GLFW.glfwGetPrimaryMonitor(), NULL);
 		if (window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
 
@@ -89,8 +92,8 @@ public class DisplayManager {
 				}
 			}
 
-			if(key == GLFW.GLFW_KEY_F2 && action == GLFW.GLFW_RELEASE) {
-				if(!wireframe) {
+			if (key == GLFW.GLFW_KEY_F2 && action == GLFW.GLFW_RELEASE) {
+				if (!wireframe) {
 					GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 					wireframe = true;
 				} else {
@@ -136,7 +139,8 @@ public class DisplayManager {
 			Inputs.setToMoveCamera(true);
 		});
 
-		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {});
+		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
+		});
 
 		GLFW.glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
 			Inputs.setMouseScrollY((float) yOffset);

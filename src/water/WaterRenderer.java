@@ -1,20 +1,18 @@
 package water;
 
-import java.util.List;
-
+import entities.Camera;
 import models.RawModel;
-
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-
 import renderEngine.Loader;
 import renderEngine.MainGameLoop;
 import toolBox.Maths;
-import entities.Camera;
+
+import java.util.List;
 
 public class WaterRenderer {
 
@@ -40,7 +38,7 @@ public class WaterRenderer {
 	}
 
 	public void render(List<WaterTile> water, Camera camera) {
-		prepareRender(camera);	
+		prepareRender(camera);
 		for (WaterTile tile : water) {
 			Matrix4f modelMatrix = Maths.createTransformationMatrix(
 					new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), 0, 0, 0,
@@ -50,7 +48,7 @@ public class WaterRenderer {
 		}
 		unbind();
 	}
-	
+
 	private void prepareRender(Camera camera) {
 		shader.start();
 		shader.loadViewMatrix(camera);
@@ -66,7 +64,7 @@ public class WaterRenderer {
 		GL13.glActiveTexture(GL13.GL_TEXTURE2);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, dudvTexture);
 	}
-	
+
 	private void unbind() {
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
@@ -75,7 +73,7 @@ public class WaterRenderer {
 
 	private void setUpVAO(Loader loader) {
 		// Just x and z vertex positions here, y is set to 0 in v.shader
-		float[] vertices = { -1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1 };
+		float[] vertices = {-1, -1, -1, 1, 1, -1, 1, -1, -1, 1, 1, 1};
 		quad = loader.loadToVAO(vertices, 2);
 	}
 

@@ -33,7 +33,7 @@ void main(void) {
     pass_textureCoords = textureCoords;
 
     vec3 actualNormal = normal;
-    if(useFakeLighting > 0.5) {
+    if (useFakeLighting > 0.5) {
         actualNormal = vec3(0.0, 1.0, 0.0);
     }
 

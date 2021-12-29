@@ -18,7 +18,7 @@ public class GUIRenderer {
 
 	public GUIRenderer(Loader loader) {
 
-		float[] positions = {-1 , 1, -1, -1, 1, 1, 1, -1};
+		float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
 		quad = loader.loadToVAO(positions, 2);
 		shader = new GUIShader();
 
@@ -34,7 +34,7 @@ public class GUIRenderer {
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-		for(GUITexture gui : guis) {
+		for (GUITexture gui : guis) {
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, gui.getTexture());
 			Matrix4f matrix = Maths.createTransformationMatrix(gui.getPosition(), gui.getScale());
