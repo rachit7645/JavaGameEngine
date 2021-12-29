@@ -2,6 +2,7 @@ package entities;
 
 import models.TexturedModel;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 import renderEngine.MainGameLoop;
 import terrains.Terrain;
 
@@ -39,21 +40,21 @@ public class Player extends Entity {
 
 	private void checkInput(Terrain currentTerrain) {
 
-		if (Inputs.isIsWPressed())
+		if (Inputs.isPressed(GLFW.GLFW_KEY_W))
 			this.currentSpeed = RUN_SPEED;
-		else if (Inputs.isIsSPressed())
+		else if (Inputs.isPressed(GLFW.GLFW_KEY_S))
 			this.currentSpeed = -RUN_SPEED;
 		else
 			this.currentSpeed = 0;
 
-		if (Inputs.isIsDPressed())
+		if (Inputs.isPressed(GLFW.GLFW_KEY_D))
 			this.currentTurnSpeed = -TURN_SPEED;
-		else if (Inputs.isIsAPressed())
+		else if (Inputs.isPressed(GLFW.GLFW_KEY_A))
 			this.currentTurnSpeed = TURN_SPEED;
 		else
 			this.currentTurnSpeed = 0;
 
-		if (Inputs.isIsSpacebarPressed())
+		if (Inputs.isPressed(GLFW.GLFW_KEY_SPACE))
 			jump(currentTerrain);
 		else
 			isJumpFinished = false;

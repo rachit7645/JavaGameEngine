@@ -55,6 +55,7 @@ public class MainGameLoop {
 		this.window = window;
 
 		GL.createCapabilities();
+		Inputs.setWindow(window);
 
 		loader = new Loader();
 		random = new Random(69420);

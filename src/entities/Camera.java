@@ -1,6 +1,8 @@
 package entities;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFW;
 
 public class Camera {
 
@@ -12,28 +14,32 @@ public class Camera {
 	private float yaw = 0;
 	private float roll = 0;
 
+	private Vector2f cursorPos;
+	private Vector2f oldCursorPos;
+
 	private Player player;
 
 	public Camera(Player player) {
 		this.player = player;
 		this.position = player.getPosition().add(0, 50, 0);
+		this.cursorPos = new Vector2f(0, 0);
 	}
 
 	public void move() {
 
+		checkInputs();
 		calculateZoom();
-		if (Inputs.isToMoveCamera()) {
-			calculatePitch();
-			calculateAngleAroundPlayer();
-		}
+		calculatePitch();
+		calculateAngleAroundPlayer();
 		float hDistance = calculateHorizontalDistance();
 		float vDistance = calculateVerticalDistance();
 		calculateCameraPosition(hDistance, vDistance);
 
 	}
 
-	public void invertPitch() {
-		pitch = -pitch;
+	void checkInputs() {
+		oldCursorPos = cursorPos;
+		cursorPos = Inputs.getCursorPos();
 	}
 
 	private void calculateCameraPosition(float hDistance, float vDistance) {
@@ -75,8 +81,16 @@ public class Camera {
 		angleAroundPlayer -= angleChange;
 	}
 
+	public void invertPitch() {
+		pitch = -pitch;
+	}
+
 	public Vector3f getPosition() {
 		return position;
+	}
+
+	public void setPosition(Vector3f position) {
+		this.position = position;
 	}
 
 	public float getPitch() {
@@ -91,16 +105,12 @@ public class Camera {
 		return roll;
 	}
 
-	public void setPosition(Vector3f position) {
-		this.position = position;
-	}
-
 	private float getDX() {
-		return Inputs.getCursorXPos() - Inputs.getOldCursorXPos();
+		return cursorPos.x - oldCursorPos.x;
 	}
 
 	private float getDY() {
-		return Inputs.getCursorYPos() - Inputs.getOldCursorYPos();
+		return cursorPos.y - oldCursorPos.y;
 	}
 
 }

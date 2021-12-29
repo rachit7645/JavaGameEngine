@@ -55,7 +55,8 @@ public class DisplayManager {
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
 		GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 3);
 
-		window = GLFW.glfwCreateWindow(1366, 768, "A Game By RachitCodes: " + gameVersion, GLFW.glfwGetPrimaryMonitor(), NULL);
+		window = GLFW.glfwCreateWindow(1366, 768, "A Game By RachitCodes: " + gameVersion,
+					GLFW.glfwGetPrimaryMonitor(), NULL);
 		if (window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
 
@@ -102,45 +103,9 @@ public class DisplayManager {
 				}
 			}
 
-			if (key == GLFW.GLFW_KEY_W && action == GLFW.GLFW_PRESS)
-				Inputs.setIsWPressed(true);
-			else if (key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_PRESS)
-				Inputs.setIsSPressed(true);
-
-			if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_PRESS)
-				Inputs.setIsAPressed(true);
-			else if (key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_PRESS)
-				Inputs.setIsDPressed(true);
-
-			if (key == GLFW.GLFW_KEY_SPACE && action == GLFW.GLFW_PRESS)
-				Inputs.setIsSpacebarPressed(true);
-
-			if (key == GLFW.GLFW_KEY_W && action == GLFW.GLFW_RELEASE)
-				Inputs.setIsWPressed(false);
-			else if (key == GLFW.GLFW_KEY_S && action == GLFW.GLFW_RELEASE)
-				Inputs.setIsSPressed(false);
-
-			if (key == GLFW.GLFW_KEY_A && action == GLFW.GLFW_RELEASE)
-				Inputs.setIsAPressed(false);
-			else if (key == GLFW.GLFW_KEY_D && action == GLFW.GLFW_RELEASE)
-				Inputs.setIsDPressed(false);
-
-			if (key == GLFW.GLFW_KEY_SPACE && action == GLFW.GLFW_RELEASE)
-				Inputs.setIsSpacebarPressed(false);
 		});
 
 		GLFW.glfwSetWindowSizeCallback(window, (window, width, height) -> MasterRenderer.setToResize(true));
-
-		GLFW.glfwSetCursorPosCallback(window, (window, xPos, yPos) -> {
-			Inputs.setOldCursorXPos(Inputs.getCursorXPos());
-			Inputs.setOldCursorYPos(Inputs.getCursorYPos());
-			Inputs.setCursorXPos((float) xPos);
-			Inputs.setCursorYPos((float) yPos);
-			Inputs.setToMoveCamera(true);
-		});
-
-		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods) -> {
-		});
 
 		GLFW.glfwSetScrollCallback(window, (window, xOffset, yOffset) -> {
 			Inputs.setMouseScrollY((float) yOffset);
